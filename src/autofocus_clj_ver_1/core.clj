@@ -23,10 +23,13 @@
 (defn -main
   "I don't do a whole lot ... yet."
   []
-  (reset-list)
+  (reset-list) ;; note: comment this out to see strange behavior
   (println (stringify-list))
   (add-item-to-list example-item)
   (println (stringify-list))
   (println "Hello, World!"))
 
 (-main)
+
+;; questions
+;; - [ ] Why does the first printout of the to-do list appear to be incorrect (not empty) without a reset? (see first comment in -main)
