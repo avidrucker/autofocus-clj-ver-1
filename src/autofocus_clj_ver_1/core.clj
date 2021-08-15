@@ -27,6 +27,7 @@
     (pr-str @my-list)))
 
 (defn demo1
+  "prints out empty list, adds a new item, and then prints again"
   []
   (println "start of demo")
   (reset-list) ;; note: atom state is preserved between calls
