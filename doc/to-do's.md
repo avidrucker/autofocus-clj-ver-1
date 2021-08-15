@@ -8,6 +8,8 @@
 - [x] Extract demo code to isolated demo fuction 
 
 - [ ] Create demo where three items are added to the list, and the first markable item is marked [functionality] [temporary] [visible]
+    - [ ] Squash bug where it appears that state is not being correct mutated
+        - [ ] Convert as many functions to pure functions as possible to reduce bug-friendly habitat [bugfix]
 - [ ] Enable user to input text for a new to-do item manually in the console [IO]
 - [ ] Brainstorm clearer naming conventions for to-do item statuses: "unmarked", "dotted", and "completed" [readability]
 - [ ] Update code to enable automatic assignment *and* incrementing of to-do list item IDs [temporary] [invisible]
