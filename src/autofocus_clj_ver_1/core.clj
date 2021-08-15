@@ -23,7 +23,7 @@
 (defn -main
   "I don't do a whole lot ... yet."
   []
-  (reset-list) ;; note: comment this out to see strange behavior
+  (reset-list) ;; note: atom state is preserved between calls
   (println (stringify-list))
   (add-item-to-list example-item)
   (println (stringify-list))
@@ -32,4 +32,5 @@
 (-main)
 
 ;; questions
-;; - [ ] Why does the first printout of the to-do list appear to be incorrect (not empty) without a reset? (see first comment in -main)
+;; - [x] Why does the first printout of the to-do list appear to be incorrect (not empty) without a reset? (see first comment in -main)
+;;       - answer: https://clojureverse.org/t/how-to-understand-atom-updates-in-real-time/8043
