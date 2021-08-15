@@ -1,5 +1,5 @@
 (ns autofocus-clj-ver-1.core
-  (:gen-class) 
+  (:gen-class)
   (:require [clojure.pprint :as p]))
 
 (def example-item
@@ -33,8 +33,10 @@
   (let [app-state1 {:current-list []}
         app-state2 (assoc app-state1
                           :current-list
-                          (add-item-to-list (app-state1 :current-list) example-item))]
-    
+                          (add-item-to-list
+                           (app-state1 :current-list)
+                           example-item))]
+
     (binding [p/*print-right-margin* 30]
       (println "start of demo1")
       (println "before:")
@@ -54,28 +56,75 @@
    :text text-input
    :is-hidden false})
 
-;; TODO: convert to a test
+;; ;; TODO: implement stub
+;; (defn is-auto-markable-list?
+;;   "Determines whether a list is ready to be 'auto-marked'"
+;;   [input-list]
+;;   (condp
+;;    (zero? (count input-list)) true
+;;     (and
+;;      (some :clean input-list)
+;;      (not-any? :marked input-list)) true
+;;     false ;; default else
+;;     ))
+
+;; ;; TODO: implement stub
+;; (defn index-of-first-markable
+;;   [input-list]
+;;   0)
+
+;; ;; TODO: implement stub
+;; (defn mark-first-markable!
+;;   "Marks the first markable item of a list.
+;;    If no markable items are found, the list is returned as-is.
+;;    I am calling this internally 'auto-marking'."
+;;   [input-list]
+;;   input-list)
+
+;; "dot item"
+(defn mark-item
+  "Changes the status attribute of an item, 
+   indicating that it is ready to do.
+   This is also called 'dotting an item'."
+  [input-item]
+  (assoc input-item :status :marked))
+
+;; temporary function to enable demo2
+;; note: this function will be replaced
+;;    by `mark-first-markable-item`
+(defn mark-first-item [input-list]
+  (assoc 
+   input-list 
+   0 
+   (mark-item (first input-list))))
+
+;; TODO: Convert to a test
 (defn demo2
   "adds three items to list, prints, automarks the first markable item, and then prints again"
   []
-  (let [app-state1 {:current-list []}
-        ;; build fruit to-do items
+  (let [app-state1 [] ;; {:current-list []}
+        ;; Build fruit to-do items
         items-to-add (map text-to-todo-item fruit)
-        app-state2 (assoc app-state1
-                          :current-list
-                          ;; add fruit to-do items to list
-                          (map
-                           #(add-item-to-list (app-state1 :current-list) %)
-                           items-to-add))]
+        ;; Note: Mapping here converts vector to list
+        ;;       ... which makes vector/sequence only
+        ;;       functions not behave (at all or as expected)
+        ;; Add fruit to-do items to list
+        app-state2 (vec (flatten (map
+                            #(add-item-to-list 
+                              app-state1 %)
+                            items-to-add)))
+        app-state3 (mark-first-item app-state2)
+        ]
 
     (binding [p/*print-right-margin* 30]
       (println "start of demo2")
-      (println "before:")
-      (p/pprint (stringify-list (app-state1 :current-list)))
-      (println "after:")
-      (p/pprint (stringify-list (app-state2 :current-list)))
-      (println "end of demo2"))
-    ))
+      (println "before (1):")
+      (p/pprint (stringify-list app-state1))
+      (println "after (2):")
+      (p/pprint (stringify-list app-state2))
+      (println "final (3):")
+      (p/pprint (stringify-list app-state3))
+      (println "end of demo2"))))
 
 (defn -main
   "runs the entire AutoFocus program"
