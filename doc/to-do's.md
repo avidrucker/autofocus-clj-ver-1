@@ -13,6 +13,7 @@
             - [x] Remove global state from demo1
             - [x] Remove global state from demo2
         - [x] Remove mutable state to reduce bug-friendly habitat [bugfix]
+    - [x] Clean up render output to make individual items easier to read
 - [ ] Enable user to input text for a new to-do item manually in the console [IO]
 - [ ] Brainstorm clearer naming conventions for to-do item statuses: "unmarked", "dotted", and "completed" [readability]
 - [ ] Update code to enable automatic assignment *and* incrementing of to-do list item IDs [temporary] [invisible]
