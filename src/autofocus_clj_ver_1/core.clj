@@ -29,19 +29,30 @@
 (defn demo1
   "prints out empty list, adds a new item, and then prints again"
   []
-  (println "start of demo")
+  (println "start of demo1")
   (reset-list) ;; note: atom state is preserved between calls
   (println (stringify-list))
   (add-item-to-list example-item)
   (println (stringify-list))
   (reset-list) ;; clear the to-do list at the end of the demo
-  (println "end of demo")
+  (println "end of demo1")
+  )
+
+(defn demo2
+  "adds three items to list, prints, automarks the first markable item, and then prints again"
+  []
+  (println "start of demo2")
+  (reset-list)
+  ;; demo2 code goes here
+  (reset-list)
+  (println "end of demo2")
   )
 
 (defn -main
   "runs the entire AutoFocus program"
   []
-  (demo1))
+  (demo1)
+  (demo2))
 
 (-main)
 
