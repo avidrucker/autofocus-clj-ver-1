@@ -38,20 +38,33 @@
   (println "end of demo1")
   )
 
+(def fruit
+  '("apple" "banana" "cherry"))
+
+(defn text-to-todo-item
+  "takes a text input to create a new to-do list item"
+  [text-input]
+  {:id "1234567890" ;; TODO: replace hardcoded non-unique id w/ incremental, unique
+   :status :clean
+   :text text-input
+   :is-hidden false})
+
 (defn demo2
   "adds three items to list, prints, automarks the first markable item, and then prints again"
   []
   (println "start of demo2")
   (reset-list)
-  ;; demo2 code goes here
-  (reset-list)
-  (println "end of demo2")
-  )
+  (println "before: " (stringify-list))
+  (map add-item-to-list
+       (map text-to-todo-item fruit))
+  (println "after: " (stringify-list))
+  ;; (reset-list)
+  (println "end of demo2"))
 
 (defn -main
   "runs the entire AutoFocus program"
   []
-  (demo1)
+  ;;(demo1)
   (demo2))
 
 (-main)
