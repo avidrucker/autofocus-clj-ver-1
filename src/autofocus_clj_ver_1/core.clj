@@ -8,12 +8,6 @@
    :text "Wash the dishes"
    :is-hidden false})
 
-;; ;; pure-ish
-;; (defn reset-list
-;;   "clears our to-do list, useful for testing purposes"
-;;   [input-list]
-;;   [])
-
 ;; pure
 (defn add-item-to-list [input-list new-item]
   (conj input-list new-item))
@@ -99,8 +93,11 @@
    (mark-item (first input-list))))
 
 ;; TODO: Convert to a test
+;; TODO: implement automark of first markable item
 (defn demo2
-  "adds three items to list, prints, automarks the first markable item, and then prints again"
+  "adds three items to list, prints, 
+   automarks the first markable item, 
+   and then prints again"
   []
   (let [app-state1 [] ;; {:current-list []}
         ;; Build fruit to-do items
@@ -108,7 +105,11 @@
         ;; Note: Mapping here converts vector to list
         ;;       ... which makes vector/sequence only
         ;;       functions not behave (at all or as expected)
-        ;; Add fruit to-do items to list
+        ;; question: Is there a cleaner way to map over
+        ;;     a data source (in this case the fruit list)
+        ;;     without needing to flatten and vec back to
+        ;;     the desired shape? (flat vector of hashmaps)  
+        ;; Add fruit to-do items to to-do list
         app-state2 (vec (flatten (map
                             #(add-item-to-list 
                               app-state1 %)
