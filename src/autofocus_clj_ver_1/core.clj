@@ -1,5 +1,6 @@
 (ns autofocus-clj-ver-1.core
-  (:gen-class))
+  (:gen-class) 
+  (:require [clojure.pprint :as p]))
 
 (def example-item
   {:id "1234567890"
@@ -23,7 +24,7 @@
   [list-input]
   (if (zero? (count list-input))
     "list is empty"
-    (pr-str list-input)))
+    list-input))
 
 ;; TODO: convert to a test
 (defn demo1
@@ -33,10 +34,14 @@
         app-state2 (assoc app-state1
                           :current-list
                           (add-item-to-list (app-state1 :current-list) example-item))]
-    (println "start of demo1")
-    (println "before: " (stringify-list (app-state1 :current-list)))
-    (println "after: " (stringify-list (app-state2 :current-list)))
-    (println "end of demo1")))
+    
+    (binding [p/*print-right-margin* 30]
+      (println "start of demo1")
+      (println "before:")
+      (p/pprint (stringify-list (app-state1 :current-list)))
+      (println "after:")
+      (p/pprint (stringify-list (app-state2 :current-list)))
+      (println "end of demo1"))))
 
 (def fruit
   '("apple" "banana" "cherry"))
@@ -49,33 +54,37 @@
    :text text-input
    :is-hidden false})
 
-;; (defn demo2
-;;   "adds three items to list, prints, automarks the first markable item, and then prints again"
-;;   []
-;;   (let [current-list (atom [])
-;;         ;; build fruit to-do items
-;;         items-to-add (map text-to-todo-item fruit)]
-;;     (println "start of demo2")
-;;     (println "before: " 
-;;              (stringify-list current-list))
-    
-;;     ;; add fruit to-do items to list
-;;     (map 
-;;      #(add-item-to-list @current-list %)
-;;      items-to-add)
+;; TODO: convert to a test
+(defn demo2
+  "adds three items to list, prints, automarks the first markable item, and then prints again"
+  []
+  (let [app-state1 {:current-list []}
+        ;; build fruit to-do items
+        items-to-add (map text-to-todo-item fruit)
+        app-state2 (assoc app-state1
+                          :current-list
+                          ;; add fruit to-do items to list
+                          (map
+                           #(add-item-to-list (app-state1 :current-list) %)
+                           items-to-add))]
 
-;;     (println "after: " 
-;;              (stringify-list current-list))
-;;   ;; (reset-list)
-;;     (println "end of demo2")))
+    (binding [p/*print-right-margin* 30]
+      (println "start of demo2")
+      (println "before:")
+      (p/pprint (stringify-list (app-state1 :current-list)))
+      (println "after:")
+      (p/pprint (stringify-list (app-state2 :current-list)))
+      (println "end of demo2"))
+    ))
 
 (defn -main
   "runs the entire AutoFocus program"
   []
+  (println "============")
   (demo1)
   (println "------------")
-  ;;(demo2)
-  )
+  (demo2)
+  (println "============"))
 
 (-main)
 
