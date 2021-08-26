@@ -3,6 +3,7 @@
   (:require [clojure.string :as string]))
 ;; [clojure.pprint :as p]
 
+;; TODO: denote items that "change" the program's state, ie. mark-item --> mark-item!
 ;; pure
 (defn add-item-to-list [input-list new-item]
   (conj input-list new-item))
@@ -23,42 +24,39 @@
 (defn render-list-with-marks [input-list]
   (mapv render-item-with-mark input-list))
 
-;; question: is this effectful, or side-effecting?
-;; (defn print-tight [stuff-to-print]
-;;   (binding [p/*print-right-margin* 30]
-;;     (p/pprint stuff-to-print)))
-
-;; (defn print-vertically [stuff-to-print]
-;;   (concat "" (map #(str % "\n") stuff-to-print)))
-
 ;; pure
 (defn stringify-list
-  "enables convenient printing of our to-do list, `list-to-string`"
+  "Enables convenient printing of a to-do list
+   where multiple lines are used for multiple items.
+   Fromerly called `list-to-string`"
   [list-input]
   (if (zero? (count list-input))
     "list is empty"
     (string/join "\n" (render-list-with-marks list-input))))
 
-;; (defn print-demo [number before-state after-state]
-;;   (binding [p/*print-right-margin* 30]
-;;     (println (str "start of demo" number))
-;;     (println "before:")
-;;     (p/pprint (stringify-list (before-state :current-list)))
-;;     (println "after:")
-;;     (p/pprint (stringify-list (after-state :current-list)))
-;;     (println (str "end of demo" number))))
+(defn contains-status?
+  "checks to see if an item is of a given status"
+  [item-input status]
+  (= (item-input :status) status))
 
-;; ;; TODO: implement stub
-;; (defn is-auto-markable-list?
-;;   "Determines whether a list is ready to be 'auto-marked'"
-;;   [input-list]
-;;   (condp
-;;    (zero? (count input-list)) true
-;;     (and
-;;      (some :clean input-list)
-;;      (not-any? :marked input-list)) true
-;;     false ;; default else
-;;     ))
+;; (defn get-status [item-input]
+;;   (item-input :status))
+
+(defn is-auto-markable-list?
+  "Determines whether a list is ready to be 'auto-marked'"
+  [input-list]
+  (cond
+   ;; may not be empty
+   (zero? (count input-list)) false
+    (and
+     ;; must contain clean items
+     ;; TIL: You can check for key value pairs in a list of hashmaps by using
+     ;;      some?, some, a key look up, and a value comparison
+     (some? (some #(contains-status? % :clean) input-list))
+     ;; must not contain any marked items
+     (not-any? #(contains-status? % :marked) input-list)) true
+    :else false ;; default else
+    ))
 
 ;; ;; TODO: implement stub
 ;; (defn index-of-first-markable
@@ -73,6 +71,7 @@
 ;;   [input-list]
 ;;   input-list)
 
+;; TODO: denote items that "change" the program's state, ie. mark-item --> mark-item!
 ;; "dot item"
 (defn mark-item
   "Changes the status attribute of an item, 
@@ -81,11 +80,13 @@
   [input-item]
   (assoc input-item :status :marked))
 
+;; TODO: denote items that "change" the program's state, ie. mark-item --> mark-item!
 ;; TODO: uncomment when this function is needed
 ;; (defn complete-item
 ;;   [input-item]
 ;;   (assoc input-item :status :completed))
 
+;; TODO: denote items that "change" the program's state, ie. mark-item --> mark-item!
 ;; temporary function to enable demo2
 ;; note: this function will be replaced
 ;;    by `mark-first-markable-item`
