@@ -8,9 +8,43 @@
    :text "Wash the dishes"
    :is-hidden false})
 
+
+(def example-list
+  [{:id "1234567890"
+    :status :marked
+    :text "apple"
+    :is-hidden false}
+   {:id "1234567890"
+    :status :clean
+    :text "banana"
+    :is-hidden false}
+   {:id "1234567890"
+    :status :clean
+    :text "cherry"
+    :is-hidden false}])
+
 ;; pure
 (defn add-item-to-list [input-list new-item]
   (conj input-list new-item))
+
+(defn status-to-mark [status]
+  (cond
+   (= status :clean) "[ ]"
+    (= status :marked) "[O]"
+    (= status :completed) "[X]"
+    :default "?"))
+
+(defn render-item-with-mark [item]
+  (str " - " (status-to-mark (:status item)) " " (:text item)))
+
+(defn render-list-with-marks [input-list]
+  (mapv render-item-with-mark input-list))
+
+(defn print-tight [stuff-to-print]
+  (binding [p/*print-right-margin* 30]
+  (p/pprint stuff-to-print)))
+
+(print-tight (render-list-with-marks example-list))
 
 ;; pure
 (defn stringify-list
@@ -18,7 +52,16 @@
   [list-input]
   (if (zero? (count list-input))
     "list is empty"
-    list-input))
+    (render-list-with-marks list-input)))
+
+(defn print-demo [number before-state after-state]
+  (binding [p/*print-right-margin* 30]
+    (println (str "start of demo" number))
+    (println "before:")
+    (p/pprint (stringify-list (before-state :current-list)))
+    (println "after:")
+    (p/pprint (stringify-list (after-state :current-list)))
+    (println (str "end of demo" number))))
 
 ;; TODO: convert to a test
 (defn demo1
@@ -31,13 +74,7 @@
                            (app-state1 :current-list)
                            example-item))]
 
-    (binding [p/*print-right-margin* 30]
-      (println "start of demo1")
-      (println "before:")
-      (p/pprint (stringify-list (app-state1 :current-list)))
-      (println "after:")
-      (p/pprint (stringify-list (app-state2 :current-list)))
-      (println "end of demo1"))))
+    (print-demo 1 app-state1 app-state2)))
 
 (def fruit
   '("apple" "banana" "cherry"))
@@ -87,9 +124,9 @@
 ;; note: this function will be replaced
 ;;    by `mark-first-markable-item`
 (defn mark-first-item [input-list]
-  (assoc 
-   input-list 
-   0 
+  (assoc
+   input-list
+   0
    (mark-item (first input-list))))
 
 ;; TODO: Convert to a test
@@ -111,12 +148,12 @@
         ;;     the desired shape? (flat vector of hashmaps)  
         ;; Add fruit to-do items to to-do list
         app-state2 (vec (flatten (map
-                            #(add-item-to-list 
-                              app-state1 %)
-                            items-to-add)))
-        app-state3 (mark-first-item app-state2)
-        ]
+                                  #(add-item-to-list
+                                    app-state1 %)
+                                  items-to-add)))
+        app-state3 (mark-first-item app-state2)]
 
+    ;; TODO: replace printout with separate function
     (binding [p/*print-right-margin* 30]
       (println "start of demo2")
       (println "before (1):")
