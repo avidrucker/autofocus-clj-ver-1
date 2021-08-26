@@ -9,6 +9,8 @@
    :text "Wash the dishes"
    :is-hidden false})
 
+(def example-empty-list [])
+
 (def example-list-all-clean
   [{:id "1234567890"
     :status :clean
@@ -59,29 +61,47 @@
   '("apple" "banana" "cherry"))
 
 ;; pure
-(defn render-list-to-only-marks [input-list]
-  (string/join " " (mapv #(:status %) input-list)))
+(defn stringify-list-compact
+  "Renders a list to a single-line string of only its marks"
+  [input-list]
+  (string/join " " (mapv #(af/status-to-mark (:status %)) input-list)))
+
+;; (some? (some #(af/contains-status? % :clean) example-list-all-clean))
+;; (some? (some #(af/contains-status? % :done) example-list-all-clean))
 
 (deftest a-test
-  (testing "Printing lists"
+  (testing "Rendering lists"
     (is
-      (= (af/stringify-list []) "list is empty")
-      "Printing an empty list works as expected")
+     (= (af/stringify-list []) "list is empty")
+     "Rendering an empty list works as expected")
     (is
      (= (af/stringify-list [example-item]) " - [ ] Wash the dishes")
-     "Printing a list with one item works as expected")
+     "Rendering a list with one item works as expected")
     (is
      (= (af/stringify-list example-list-all-clean)
         " - [ ] apple\n - [ ] banana\n - [ ] cherry")
-     "Printing a list that has only clean items works as expected"))
-  
+     "Rendering a list that has only clean items works as expected")
+    (is
+     (= (stringify-list-compact example-list-all-clean)
+        "[ ] [ ] [ ]")
+     "Compact-rendering a list with three clean items works as expected"))
+
   (testing "Marking lists"
     (is
      (= (af/stringify-list (af/mark-first-item example-list-all-clean))
         " - [o] apple\n - [ ] banana\n - [ ] cherry")
-     "Marking a list that has only clean items works as expected")
-    )
-  )
+     "Marking a list that has only clean items works as expected"))
+
+  (testing "Determining if a list is auto-markable"
+    (is (= false (af/is-auto-markable-list?
+                  example-empty-list)))
+    (is (= true (af/is-auto-markable-list?
+                 example-list-all-clean)))
+    (is (= true (af/is-auto-markable-list?
+                 example-list-first-completed)))
+    (is (= false (af/is-auto-markable-list?
+                  example-list-first-completed-second-marked)))
+    ))
 
 ;; TODO: convert to a test
 ;; (defn demo1
@@ -139,3 +159,19 @@
 ;;       (p/pprint (stringify-list app-state3))
 ;;       (println "end of demo2"))))
 
+;; (defn print-demo [number before-state after-state]
+;;   (binding [p/*print-right-margin* 30]
+;;     (println (str "start of demo" number))
+;;     (println "before:")
+;;     (p/pprint (stringify-list (before-state :current-list)))
+;;     (println "after:")
+;;     (p/pprint (stringify-list (after-state :current-list)))
+;;     (println (str "end of demo" number))))
+
+;; question: is this effectful, or side-effecting?
+;; (defn print-tight [stuff-to-print]
+;;   (binding [p/*print-right-margin* 30]
+;;     (p/pprint stuff-to-print)))
+
+;; (defn print-vertically [stuff-to-print]
+;;   (concat "" (map #(str % "\n") stuff-to-print)))
