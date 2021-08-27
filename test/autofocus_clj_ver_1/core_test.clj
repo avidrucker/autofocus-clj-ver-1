@@ -100,5 +100,9 @@
     (is (= true (af/is-auto-markable-list?
                  example-list-first-completed)))
     (is (= false (af/is-auto-markable-list?
-                  example-list-first-completed-second-marked)))
+                  example-list-first-completed-second-marked))))
+
+  (testing "Finding first markable item in a list"
+    (is (= 0 (af/index-of-first-markable example-list-all-clean)))
+    (is (= 1 (af/index-of-first-markable example-list-first-completed)))
     ))
