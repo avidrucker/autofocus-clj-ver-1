@@ -60,19 +60,7 @@
     :else false ;; default else
     ))
 
-;; design decision:
-;; UPDATE: Wait... nevermind! I can simply use `map-indexed`
-;; UPDATE 2: Will use `keep-indexed` instead b/c (for now) I don't need the nils.
-;; The "index-of-first-markable" function will be much easier to implement I believe
-;; if items store their own index in the list. That said, adding indecies to list
-;; items can also create more issues down the line, if they ever need to be updated,
-;; for example... Updating list item indecies may be beneficial, for example, in
-;; circumstances where the entire list is cleared out, lists are saved in and out of
-;; memory, or other "global" list modifications/(de)serializations. I believe I can
-;; avoid most of the mutations & place-driven development ("slots") this time, because
-;; Clojure makes it harder to mutate, and I have the intention to avoid the "slots".
-
-
+;; note: see design decision 2
 ;; note: if/when "lastDone" is implemented, new logic may need to be added
 ;;       (first markable starts looking after "lastDone", instead of index 0)
 (defn index-of-first-markable
@@ -83,25 +71,18 @@
     #(when (contains-status? %2 :clean) %1)
     input-list)))
 
-;; MARKED FOR DELETION
-;; "dot item"
-;; (defn mark-item
-;;   "Changes the status attribute of an item, 
-;;    indicating that it is ready to do.
-;;    This is also called 'dotting an item'."
-;;   [input-item]
-;;   (assoc input-item :status :marked))
-
 ;; note: this replaces "mark-item" and "complete-item"
 (defn new-item-status!
   "Changes the status attribute of an item, 
    indicating that it is either 'marked'
    (also called 'dotting' or 'dotted' in
-   the original AutoFocus documentation)
+   the original AutoFocus documentation,
+   this indicates an item is ready to do)
    or 'completed'."
   [input-item new-status]
   (assoc input-item :status new-status))
 
+;; note: this replaced & superceded "mark-first-item"
 (defn mod-item-status-at-index-in-list!
   "returns new list with the status of an item
    updated at the given index in list"
@@ -120,27 +101,10 @@
     input-list ;; if list ISN'T auto-markable
     ))
 
-;; TODO: denote items that "change" the program's state, ie. mark-item --> mark-item!
-;; temporary function to enable demo2
-;; note: this function will be replaced
-;;    by `mark-first-markable-item`
-(defn mark-first-item [input-list]
-  (assoc
-   input-list
-   0
-   (new-item-status! (first input-list) :marked)))
-
 (defn -main
   "runs the entire AutoFocus program"
   []
-  (println "============")
-  ;; (demo1)
-  (println "------------")
-  ;; (demo2)
-  (println "============"))
+  ;; MAIN PROGRAM GOES HERE
+  )
 
 ;; (-main)
-
-;; questions
-;; - [x] Why does the first printout of the to-do list appear to be incorrect (not empty) without a reset? (see first comment in -main)
-;;       - answer: https://clojureverse.org/t/how-to-understand-atom-updates-in-real-time/8043
