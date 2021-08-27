@@ -63,7 +63,7 @@
   [input-list]
   (string/join " " (mapv #(af/status-to-mark (:status %)) input-list)))
 
-(deftest a-test
+(deftest unit-tests
   (testing "Rendering lists"
     (is
      (= "list is empty"
