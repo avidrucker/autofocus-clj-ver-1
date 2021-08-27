@@ -13,7 +13,7 @@
 ;; pure
 (defn status-to-mark [status]
   (cond
-   (= status :clean) "[ ]"
+    (= status :clean) "[ ]"
     (= status :marked) "[o]"
     (= status :completed) "[x]"
     :default "?"))
@@ -49,7 +49,7 @@
   [input-list]
   (cond
    ;; may not be empty
-   (zero? (count input-list)) false
+    (zero? (count input-list)) false
     (and
      ;; must contain clean items
      ;; TIL: You can check for key value pairs in a list of hashmaps by using
@@ -80,31 +80,45 @@
   [input-list]
   (first
    (keep-indexed ;; item is %2, index is %1
-   #(when (contains-status? %2 :clean) %1)
-   input-list)))
+    #(when (contains-status? %2 :clean) %1)
+    input-list)))
 
-;; ;; TODO: implement stub
-;; (defn mark-first-markable!
-;;   "Marks the first markable item of a list.
-;;    If no markable items are found, the list is returned as-is.
-;;    I am calling this internally 'auto-marking'."
-;;   [input-list]
-;;   input-list)
-
-;; TODO: denote items that "change" the program's state, ie. mark-item --> mark-item!
+;; MARKED FOR DELETION
 ;; "dot item"
-(defn mark-item
-  "Changes the status attribute of an item, 
-   indicating that it is ready to do.
-   This is also called 'dotting an item'."
-  [input-item]
-  (assoc input-item :status :marked))
-
-;; TODO: denote items that "change" the program's state, ie. mark-item --> mark-item!
-;; TODO: uncomment when this function is needed
-;; (defn complete-item
+;; (defn mark-item
+;;   "Changes the status attribute of an item, 
+;;    indicating that it is ready to do.
+;;    This is also called 'dotting an item'."
 ;;   [input-item]
-;;   (assoc input-item :status :completed))
+;;   (assoc input-item :status :marked))
+
+;; note: this replaces "mark-item" and "complete-item"
+(defn new-item-status!
+  "Changes the status attribute of an item, 
+   indicating that it is either 'marked'
+   (also called 'dotting' or 'dotted' in
+   the original AutoFocus documentation)
+   or 'completed'."
+  [input-item new-status]
+  (assoc input-item :status new-status))
+
+(defn mod-item-status-at-index-in-list!
+  "returns new list with the status of an item
+   updated at the given index in list"
+  [in-list in-index in-status]
+  (assoc in-list in-index
+   (new-item-status! (get in-list in-index) in-status)))
+
+(defn mark-first-markable!
+  "Marks the first markable item of a list.
+   If no markable items are found, the list is returned as-is.
+   I am calling this internally 'auto-marking'."
+  [input-list]
+  (if (is-auto-markable-list? input-list)
+    (let [index (index-of-first-markable input-list)]
+      (mod-item-status-at-index-in-list! input-list index :marked))
+    input-list ;; if list ISN'T auto-markable
+    ))
 
 ;; TODO: denote items that "change" the program's state, ie. mark-item --> mark-item!
 ;; temporary function to enable demo2
@@ -114,7 +128,7 @@
   (assoc
    input-list
    0
-   (mark-item (first input-list))))
+   (new-item-status! (first input-list) :marked)))
 
 (defn -main
   "runs the entire AutoFocus program"
