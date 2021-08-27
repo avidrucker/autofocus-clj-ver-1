@@ -1,7 +1,8 @@
 (ns autofocus-clj-ver-1.core
   (:gen-class)
   (:require [clojure.string :as string]))
-;; [clojure.pprint :as p]
+
+;; domain logic file
 
 ;; TODO: denote items that "change" the program's state, ie. mark-item --> mark-item!
 ;; pure
