@@ -26,11 +26,11 @@
 
 - [x] Move example code to core_test
 
-- [ ] Update demo #2 to use an auto-marking function instead of manually hardcoding the demo to always mark index 0 [functionality] [visible]
+- [ ] Write your first integration test or E2E test which uses "auto-marking" function `mark-first-markable!` ~~Update demo #2 to use an auto-marking function instead of manually hardcoding the demo to always mark index 0~~ [functionality] [visible]
 
-    - [ ] Implement `is-auto-markable-list?`
-    - [ ] Implement `get-first-markable-index`
-    - [ ] Implement `mark-first-markable!`
+    - [x] Implement `is-auto-markable-list?`
+    - [x] Implement `get-first-markable-index`
+    - [x] Implement `mark-first-markable!`
 
 - [x] Break code into three namespaces:
 
@@ -48,6 +48,8 @@
     >
     > complete, completed, **done**
 
-- [ ] Update statuses to reflect clearer naming conventions
+- [x] Update statuses to reflect clearer naming conventions
 
-- [ ] Update code to enable automatic assignment *and* incrementing of to-do list item IDs [temporary] [invisible]
+## Won't Do ... Yet
+
+- Update code to enable automatic assignment *and* incrementing of to-do list item IDs [temporary] [invisible]
