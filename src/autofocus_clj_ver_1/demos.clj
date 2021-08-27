@@ -65,3 +65,10 @@
 ;;     (println "after:")
 ;;     (p/pprint (stringify-list (after-state :current-list)))
 ;;     (println (str "end of demo" number))))
+
+;; (defn run-all-demos []
+;;   (println "============")
+;;   (demo1)
+;;   (println "------------")
+;;   (demo2)
+;;   (println "============"))
