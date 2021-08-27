@@ -25,11 +25,9 @@
     :text "cherry"
     :is-hidden false}])
 
-;; TODO: use this for the auto-mark function
-;;       (the result should be [x] [o] [ ])
 (def example-list-first-completed
   [{:id "1234567890"
-    :status :completed
+    :status :done
     :text "apple"
     :is-hidden false}
    {:id "1234567890"
@@ -41,11 +39,9 @@
     :text "cherry"
     :is-hidden false}])
 
-;; TODO: use this for the auto-markable test
-;;       (it should return false)
 (def example-list-first-completed-second-marked
   [{:id "1234567890"
-    :status :completed
+    :status :done
     :text "apple"
     :is-hidden false}
    {:id "1234567890"
@@ -57,17 +53,15 @@
     :text "cherry"
     :is-hidden false}])
 
-(def fruit
-  '("apple" "banana" "cherry"))
+;; TODO: use this for small E2E tests [micro] [mini] [tiny]
+;; (def fruit
+;;   '("apple" "banana" "cherry"))
 
 ;; pure
 (defn stringify-list-compact
   "Renders a list to a single-line string of only its marks"
   [input-list]
   (string/join " " (mapv #(af/status-to-mark (:status %)) input-list)))
-
-;; (some? (some #(af/contains-status? % :clean) example-list-all-clean))
-;; (some? (some #(af/contains-status? % :done) example-list-all-clean))
 
 (deftest a-test
   (testing "Rendering lists"
@@ -87,6 +81,25 @@
      (= "[ ] [ ] [ ]"
         (stringify-list-compact example-list-all-clean))
      "Compact-rendering a list with three clean items works as expected"))
+  
+  (testing "Determine if certain status exists in a list"
+    (is (= true (af/list-has-items-of-status example-list-all-clean :clean)))
+    (is (= false (af/list-has-items-of-status example-list-all-clean :done)))
+    (is (= false (af/list-has-items-of-status example-list-first-completed :marked)))
+    (is (= true (af/list-has-items-of-status example-list-first-completed-second-marked :clean)))
+    (is (= true (af/list-has-items-of-status example-list-first-completed-second-marked :marked)))
+    (is (= true (af/list-has-items-of-status example-list-first-completed-second-marked :mdone)))
+    )
+
+  ;; TEMP tests
+  (testing "Determine if certain status DOES NOT EXIST in a list"
+    ;; list-has-none-of-status
+    (is (= false (af/list-has-none-of-status example-list-all-clean :clean)))
+    (is (= true (af/list-has-none-of-status example-list-all-clean :done)))
+    (is (= true (af/list-has-none-of-status example-list-first-completed :marked)))
+    (is (= false (af/list-has-none-of-status example-list-first-completed-second-marked :clean)))
+    (is (= false (af/list-has-none-of-status example-list-first-completed-second-marked :marked)))
+    (is (= false (af/list-has-none-of-status example-list-first-completed-second-marked :done))))
 
   (testing "Determining if a list is auto-markable"
     (is (= false
