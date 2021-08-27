@@ -1,3 +1,4 @@
+
 (ns autofocus-clj-ver-1.core
   (:gen-class)
   (:require [clojure.string :as string]))
@@ -59,10 +60,28 @@
     :else false ;; default else
     ))
 
-;; ;; TODO: implement stub
-;; (defn index-of-first-markable
-;;   [input-list]
-;;   0)
+;; design decision:
+;; UPDATE: Wait... nevermind! I can simply use `map-indexed`
+;; UPDATE 2: Will use `keep-indexed` instead b/c (for now) I don't need the nils.
+;; The "index-of-first-markable" function will be much easier to implement I believe
+;; if items store their own index in the list. That said, adding indecies to list
+;; items can also create more issues down the line, if they ever need to be updated,
+;; for example... Updating list item indecies may be beneficial, for example, in
+;; circumstances where the entire list is cleared out, lists are saved in and out of
+;; memory, or other "global" list modifications/(de)serializations. I believe I can
+;; avoid most of the mutations & place-driven development ("slots") this time, because
+;; Clojure makes it harder to mutate, and I have the intention to avoid the "slots".
+
+
+;; note: if/when "lastDone" is implemented, new logic may need to be added
+;;       (first markable starts looking after "lastDone", instead of index 0)
+(defn index-of-first-markable
+  "finds the first clean item in the list, and marks it"
+  [input-list]
+  (first
+   (keep-indexed ;; item is %2, index is %1
+   #(when (contains-status? %2 :clean) %1)
+   input-list)))
 
 ;; ;; TODO: implement stub
 ;; (defn mark-first-markable!
