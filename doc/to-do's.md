@@ -28,6 +28,16 @@
 
 - [ ] Update demo #2 to use an auto-marking function instead of manually hardcoding the demo to always mark index 0 [functionality] [visible]
 
+    - [ ] Implement `is-auto-markable-list?`
+    - [ ] Implement `get-first-markable-index`
+    - [ ] Implement `mark-first-markable!`
+
+- [x] Break code into three namespaces:
+
+    - [x] IO (printing, getting user input)
+    - [x] demos
+    - [x] domain logic
+
 - [ ] Enable user to input text for a new to-do item manually in the console [IO]
 
 - [x] Brainstorm clearer naming conventions for to-do item statuses: "unmarked", "dotted", and "completed" [readability]
