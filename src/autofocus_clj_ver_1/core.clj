@@ -15,7 +15,7 @@
   (cond
     (= status :clean) "[ ]"
     (= status :marked) "[o]"
-    (= status :completed) "[x]"
+    (= status :done) "[x]"
     :default "?"))
 
 ;; pure
@@ -44,6 +44,16 @@
 ;; (defn get-status [item-input]
 ;;   (item-input :status))
 
+;; TODO: implement list-has-items-of-status
+(defn list-has-items-of-status
+  [in-list in-status]
+  (some? (some #(contains-status? % in-status) in-list)))
+
+;; TEMP FUNC to test logc in `is-auto-markable-list?`
+(defn list-has-none-of-status
+  [in-list in-status]
+  (not-any? #(contains-status? % in-status) in-list))
+
 (defn is-auto-markable-list?
   "Determines whether a list is ready to be 'auto-marked'"
   [input-list]
@@ -54,9 +64,9 @@
      ;; must contain clean items
      ;; TIL: You can check for key value pairs in a list of hashmaps by using
      ;;      some?, some, a key look up, and a value comparison
-     (some? (some #(contains-status? % :clean) input-list))
+     (list-has-items-of-status input-list :clean)
      ;; must not contain any marked items
-     (not-any? #(contains-status? % :marked) input-list)) true
+     (list-has-none-of-status input-list :marked)) true
     :else false ;; default else
     ))
 
@@ -78,7 +88,7 @@
    (also called 'dotting' or 'dotted' in
    the original AutoFocus documentation,
    this indicates an item is ready to do)
-   or 'completed'."
+   or 'done'/'completed'."
   [input-item new-status]
   (assoc input-item :status new-status))
 
