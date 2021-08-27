@@ -26,6 +26,12 @@
 
 - [x] Move example code to core_test
 
+- [ ] Do some TDD to develop the next few features
+    - [ ] Rewrite the E2E tests in Clojure to use minimal setup & scaffolding, and only surface API (ie. no wrapping of functions except for string outputting purposes)
+        - [ ] List two to three features that you can infer from the E2E tests
+            - [ ] Import in the smallest two or three E2E tests from fp-autofocus (written in TypeScript)
+
+
 - [ ] Write your first integration test or E2E test which uses "auto-marking" function `mark-first-markable!` ~~Update demo #2 to use an auto-marking function instead of manually hardcoding the demo to always mark index 0~~ [functionality] [visible]
 
     - [x] Implement `is-auto-markable-list?`
