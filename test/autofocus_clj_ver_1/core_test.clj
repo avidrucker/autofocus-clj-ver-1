@@ -72,37 +72,52 @@
 (deftest a-test
   (testing "Rendering lists"
     (is
-     (= (af/stringify-list []) "list is empty")
+     (= "list is empty"
+        (af/stringify-list []))
      "Rendering an empty list works as expected")
     (is
-     (= (af/stringify-list [example-item]) " - [ ] Wash the dishes")
+     (= " - [ ] Wash the dishes"
+        (af/stringify-list [example-item]))
      "Rendering a list with one item works as expected")
     (is
-     (= (af/stringify-list example-list-all-clean)
-        " - [ ] apple\n - [ ] banana\n - [ ] cherry")
+     (= " - [ ] apple\n - [ ] banana\n - [ ] cherry"
+        (af/stringify-list example-list-all-clean))
      "Rendering a list that has only clean items works as expected")
     (is
-     (= (stringify-list-compact example-list-all-clean)
-        "[ ] [ ] [ ]")
+     (= "[ ] [ ] [ ]"
+        (stringify-list-compact example-list-all-clean))
      "Compact-rendering a list with three clean items works as expected"))
 
-  (testing "Marking lists"
-    (is
-     (= (af/stringify-list (af/mark-first-item example-list-all-clean))
-        " - [o] apple\n - [ ] banana\n - [ ] cherry")
-     "Marking a list that has only clean items works as expected"))
-
   (testing "Determining if a list is auto-markable"
-    (is (= false (af/is-auto-markable-list?
-                  example-empty-list)))
-    (is (= true (af/is-auto-markable-list?
-                 example-list-all-clean)))
-    (is (= true (af/is-auto-markable-list?
-                 example-list-first-completed)))
-    (is (= false (af/is-auto-markable-list?
-                  example-list-first-completed-second-marked))))
+    (is (= false
+           (af/is-auto-markable-list?
+            example-empty-list)))
+    (is (= true
+           (af/is-auto-markable-list?
+            example-list-all-clean)))
+    (is (= true
+           (af/is-auto-markable-list?
+            example-list-first-completed)))
+    (is (= false
+           (af/is-auto-markable-list?
+            example-list-first-completed-second-marked))))
 
   (testing "Finding first markable item in a list"
-    (is (= 0 (af/index-of-first-markable example-list-all-clean)))
-    (is (= 1 (af/index-of-first-markable example-list-first-completed)))
-    ))
+    (is (= 0 (af/index-of-first-markable
+              example-list-all-clean)))
+    (is (= 1 (af/index-of-first-markable
+              example-list-first-completed))))
+
+  (testing "Marking first markable item in a list"
+    (is (= "[o] [ ] [ ]"
+           (stringify-list-compact
+            (af/mark-first-markable!
+             example-list-all-clean)))
+        "Marking a list that has only clean items works as expected"
+        )
+    (is (= "[x] [o] [ ]"
+           (stringify-list-compact
+            (af/mark-first-markable!
+             example-list-first-completed)))
+        "Marking a list w/ one completed & two clean items works as expected"
+        )))
