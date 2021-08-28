@@ -5,11 +5,8 @@
 
 (do
   (def example-item
-    {;; :id "1234567890"
-     :status :clean
-     :text "Wash the dishes"
-   ;; :is-hidden false
-     })
+    {:status :clean
+     :text "Wash the dishes"})
 
   (def example-empty-list [])
 
@@ -18,61 +15,47 @@
       :text "a"}])
 
   (def example-list-all-clean
-    [{;; :id "1234567890"
-      :status :clean
-      :text "apple"
-    ;; :is-hidden false
-      }
-     {;; :id "1234567890"
-      :status :clean
-      :text "banana"
-    ;; :is-hidden false
-      }
-     {;; :id "1234567890"
-      :status :clean
-      :text "cherry"
-    ;; :is-hidden false
-      }])
+    [{:status :clean
+      :text "a"}
+     {:status :clean
+      :text "b"}
+     {:status :clean
+      :text "c"}])
+  
+  (def example-list-first-marked
+    [{:status :marked
+      :text "a"}
+     {:status :clean
+      :text "b"}
+     {:status :clean
+      :text "c"}])
 
   (def example-list-first-completed
-    [{;; :id "1234567890"
-      :status :done
-      :text "apple"
-    ;; :is-hidden false
-      }
-     {;; :id "1234567890"
-      :status :clean
-      :text "banana"
-    ;; :is-hidden false
-      }
-     {;; :id "1234567890"
-      :status :clean
-      :text "cherry"
-    ;; :is-hidden false
-      }])
+    [{:status :done
+      :text "a"}
+     {:status :clean
+      :text "b"}
+     {:status :clean
+      :text "c"}])
 
   (def example-list-first-completed-second-marked
-    [{;; :id "1234567890"
-      :status :done
-      :text "apple"
-    ;; :is-hidden false
-      }
-     {;; :id "1234567890"
-      :status :marked
-      :text "banana"
-    ;; :is-hidden false
-      }
-     {;; :id "1234567890"
-      :status :clean
-      :text "cherry"
-    ;; :is-hidden false
-      }])
+    [{:status :done
+      :text "a"}
+     {:status :marked
+      :text "b"}
+     {:status :clean
+      :text "c"}])
 
+  (def quick-three
+    ["a" "b" "c"])
+
+  (def regular-three
+    ["Write report" "Check email" "Tidy desk"])
+  
   ;; TODO: use this for small E2E tests [micro] [mini] [tiny]
   ;; (def fruit
   ;;   '("apple" "banana" "cherry"))
   
-  ;; pure
   (defn stringify-list-compact
     "Renders a list to a single-line string of only its marks"
     [input-list]
@@ -89,7 +72,7 @@
         (af/stringify-list [example-item]))
      "Rendering a list with one item works as expected")
     (is
-     (= " - [ ] apple\n - [ ] banana\n - [ ] cherry"
+     (= " - [ ] a\n - [ ] b\n - [ ] c"
         (af/stringify-list example-list-all-clean))
      "Rendering a list that has only clean items works as expected")
     (is
@@ -144,7 +127,14 @@
            (stringify-list-compact
             (af/mark-first-markable
              example-list-first-completed)))
-        "Marking a list w/ one completed & two clean items works as expected")))
+        "Marking a list w/ one completed & two clean items works as expected"))
+  
+  (testing "Generating review questions"
+    (is (= "Do you want to do 'b' more than 'a'?"
+           (af/generate-review-msg example-list-first-marked 1))
+        "Generates the correct review message."
+        ))
+  )
 
 ;; question: Could the state be removed/reduced here by
 ;; using a threading macro? What other effective strategies
@@ -157,22 +147,32 @@
     ;; add a new item
     (af/add-item-to-list
      my-list
-     (af/create-new-item-from-text
-      "a"))))
+     (af/create-new-item-from-text "a"))))
 
 (deftest integration-tests
-  ;; question: How are integration/E2E tests set up in an effective manner?
+  ;; question: How are integration/E2E tests set up in
+  ;;  an effective manner in Clojure?
   (testing "adding items to a list"
     (is (=
          (scaffold-integration-test-1)
-         example-list-one-item))))
+         example-list-one-item)
+        "works as expected")))
 
-(def firstThree
-  ["Write report" "Check email" "Tidy desk"])
-
+;; TODO: replace this with actual API once it is built
 (defn scaffold-e2e-test-simple
-  [])
+  "temporary setup function to scaffold e2e tests"
+  []
+  (let [item-list (map af/create-new-item-from-text quick-three)]
+    (vec (flatten (into []
+          (map #(af/add-item-to-list [] %)
+               item-list))))))
 
-;; (deftest end-to-end-tests
-;;   (testing "something"
-;;     (is (= 1 0))))
+;; TODO: use scaffold-e2e-test-simple to set up first e2e test
+(deftest end-to-end-tests
+  (testing "first simple e2e test"
+    (is (= 
+         " - [o] a\n - [ ] b\n - [ ] c"
+         (af/stringify-list
+          ;; TODO: replace `mark-first-markable` with `review-list` 
+          (af/mark-first-markable 
+           (scaffold-e2e-test-simple)))))))
