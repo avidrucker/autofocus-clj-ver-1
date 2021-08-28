@@ -31,6 +31,19 @@
         - [ ] List two to three features that you can infer from the E2E tests
             - [ ] Import in the smallest two or three E2E tests from fp-autofocus (written in TypeScript)
 
+- [ ] Enable scenario 1:
+    ```
+    1. User starts program for the first time w/ an empty list
+    2. User adds three items to their list
+    3. User starts to review their list
+        4. The first item gets marked b/c it is the first markable item and no other items have been marked yet
+        5. The user is given a choice, "do they want to do item 2 more than item 1 (the marked item closest to the end of the list)"? They may choose "yes", "no", or to "quit" (and stop the review process early)
+        6. Every time the user answers yes, the current item is marked and the app proceeds to review the next item (always asking, "do you want to do the current item more than the "closest to the end" marked item?"). Every time the user answers no, the current item is left unmarked. Every time the user quits, the marks made on this session persist.
+    7. After reviewing, there is at least one marked item. The user then goes into focus mode to work on the marked item "closest to the end" of the list. Once they are done working on it, the item is marked complete.
+        8. Optionally, if there is still work left to be done on this item, a duplicate of this item with a clean status is created and added to the end of the list.
+
+    ```
+
 - [x] Enable the adding of items to a list
 
 - [x] Test the adding of items to a list
