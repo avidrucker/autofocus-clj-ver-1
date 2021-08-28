@@ -78,6 +78,10 @@
 
 - [x] Update statuses to reflect clearer naming conventions
 
+- [ ] Enable the user to see what their "bad input" was when answering a question with input validation / constraints
+
+- [ ] Tell the user when they haven't answered a question (by entering in nothing)
+
 ## Won't Do ... Yet
 
 - ~~Update code to enable automatic assignment *and* incrementing of to-do list item IDs~~ [temporary] [invisible]
