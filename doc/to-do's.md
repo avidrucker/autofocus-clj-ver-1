@@ -31,12 +31,21 @@
         - [ ] List two to three features that you can infer from the E2E tests
             - [ ] Import in the smallest two or three E2E tests from fp-autofocus (written in TypeScript)
 
+- [x] Enable the adding of items to a list
 
-- [ ] Write your first integration test or E2E test which uses "auto-marking" function `mark-first-markable!` ~~Update demo #2 to use an auto-marking function instead of manually hardcoding the demo to always mark index 0~~ [functionality] [visible]
+- [x] Test the adding of items to a list
+
+- [x] Write your first unit test which uses "auto-marking" function `mark-first-markable!` [functionality] [visible]
 
     - [x] Implement `is-auto-markable-list?`
     - [x] Implement `get-first-markable-index`
     - [x] Implement `mark-first-markable!`
+
+- [ ] Enable "focusing" on items which marks them "complete"
+
+- [ ] Create review strings from current list state
+
+    - [ ] Ask: How can this be made interruptable?
 
 - [x] Break code into three namespaces:
 
@@ -58,4 +67,4 @@
 
 ## Won't Do ... Yet
 
-- Update code to enable automatic assignment *and* incrementing of to-do list item IDs [temporary] [invisible]
+- ~~Update code to enable automatic assignment *and* incrementing of to-do list item IDs~~ [temporary] [invisible]
