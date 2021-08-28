@@ -5,11 +5,22 @@
 
 ;; domain logic file
 
-;; TODO: denote items that "change" the program's state, ie. mark-item --> mark-item!
+;; question: What is an effective way to deal with duplicates in a list?
+;; answer with a question: How will dealing with duplicates be relevant in this program?
+(defn create-new-item-from-text
+  [text-input]
+  {
+   ;;:id "1234567890" ;; TODO: replace hardcoded non-unique id w/ incremental, unique
+   :status :clean
+   :text text-input
+   ;; :is-hidden false
+   })
+
 ;; pure
-(defn add-item-to-list [input-list new-item]
+(defn add-item-to-list! [input-list new-item]
   (conj input-list new-item))
 
+;; question: Is this best replaced by a hashmap?
 ;; pure
 (defn status-to-mark [status]
   (cond
@@ -44,7 +55,6 @@
 ;; (defn get-status [item-input]
 ;;   (item-input :status))
 
-;; TODO: implement list-has-items-of-status
 (defn list-has-items-of-status
   [in-list in-status]
   (some? (some #(contains-status? % in-status) in-list)))
