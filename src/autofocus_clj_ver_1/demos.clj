@@ -14,14 +14,6 @@
 
 ;;     (print-demo 1 app-state1 app-state2)))
 
-;; (defn text-to-todo-item
-;;   "converts text input to new to-do list item"
-;;   [text-input]
-;;   {:id "1234567890" ;; TODO: replace hardcoded non-unique id w/ incremental, unique
-;;    :status :clean
-;;    :text text-input
-;;    :is-hidden false})
-
 ;; TODO: Convert to an integration test
 ;; TODO: implement automark of first markable item
 ;; (defn demo2
@@ -31,7 +23,7 @@
 ;;   []
 ;;   (let [app-state1 [] ;; {:current-list []}
 ;;         ;; Build fruit to-do items
-;;         items-to-add (map text-to-todo-item fruit)
+;;         items-to-add (map create-new-item-from-text fruit)
 ;;         ;; Note: Mapping here converts vector to list
 ;;         ;;       ... which makes vector/sequence only
 ;;         ;;       functions not behave (at all or as expected)
