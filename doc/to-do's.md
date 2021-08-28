@@ -54,11 +54,15 @@
     - [x] Implement `get-first-markable-index`
     - [x] Implement `mark-first-markable!`
 
-- [ ] Enable "focusing" on items which marks them "complete"
+- [x] Enable "focusing" on items which marks them "complete"
 
-- [ ] Create review strings from current list state
+- [x] Create review strings from current list state
 
-    - [ ] Ask: How can this be made interruptable?
+- [ ] Determine whether a list is reviewable
+
+    - [ ] Implement `is-reviewable-list?`
+
+- [ ] Question: How can reviewing be made interruptable / cancellable while also being functionally pure with separation of concerns? (context: in the past, this seems to require both IO and while loops)
 
 - [x] Break code into three namespaces:
 
