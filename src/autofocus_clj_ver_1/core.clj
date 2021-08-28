@@ -65,14 +65,14 @@
     "Determines whether a list is ready to be 'auto-marked'"
     [input-list]
     (cond
-   ;; may not be empty
+      ;; may not be empty
       (zero? (count input-list)) false
       (and
-     ;; must contain clean items
-     ;; TIL: You can check for key value pairs in a list of hashmaps by using
-     ;;      some?, some, a key look up, and a value comparison
+       ;; must contain clean items
+       ;; TIL: You can check for key value pairs in a list of hashmaps by using
+       ;;      some?, some, a key look up, and a value comparison
        (list-has-items-of-status input-list :clean)
-     ;; must not contain any marked items
+       ;; must not contain any marked items
        (list-has-none-of-status input-list :marked)) true
       :else false ;; default else
       ))
