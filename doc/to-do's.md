@@ -78,9 +78,9 @@
 
 - [x] Update statuses to reflect clearer naming conventions
 
-- [ ] Enable the user to see what their "bad input" was when answering a question with input validation / constraints
+- [x] Enable the user to see what their "bad input" was when answering a question with input validation / constraints
 
-- [ ] Tell the user when they haven't answered a question (by entering in nothing)
+- [x] Tell the user when they haven't answered a question (by entering in nothing)
 
 ## Won't Do ... Yet
 
