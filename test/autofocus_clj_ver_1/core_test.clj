@@ -4,54 +4,68 @@
             [clojure.string :as string]))
 
 (def example-item
-  {:id "1234567890"
+  {;; :id "1234567890"
    :status :clean
    :text "Wash the dishes"
-   :is-hidden false})
+   ;; :is-hidden false
+   })
 
 (def example-empty-list [])
 
+(def example-list-one-item
+  [{:status :clean
+    :text "a"}])
+
 (def example-list-all-clean
-  [{:id "1234567890"
+  [{;; :id "1234567890"
     :status :clean
     :text "apple"
-    :is-hidden false}
-   {:id "1234567890"
+    ;; :is-hidden false
+    }
+   {;; :id "1234567890"
     :status :clean
     :text "banana"
-    :is-hidden false}
-   {:id "1234567890"
+    ;; :is-hidden false
+    }
+   {;; :id "1234567890"
     :status :clean
     :text "cherry"
-    :is-hidden false}])
+    ;; :is-hidden false
+    }])
 
 (def example-list-first-completed
-  [{:id "1234567890"
+  [{;; :id "1234567890"
     :status :done
     :text "apple"
-    :is-hidden false}
-   {:id "1234567890"
+    ;; :is-hidden false
+    }
+   {;; :id "1234567890"
     :status :clean
     :text "banana"
-    :is-hidden false}
-   {:id "1234567890"
+    ;; :is-hidden false
+    }
+   {;; :id "1234567890"
     :status :clean
     :text "cherry"
-    :is-hidden false}])
+    ;; :is-hidden false
+    }])
 
 (def example-list-first-completed-second-marked
-  [{:id "1234567890"
+  [{;; :id "1234567890"
     :status :done
     :text "apple"
-    :is-hidden false}
-   {:id "1234567890"
+    ;; :is-hidden false
+    }
+   {;; :id "1234567890"
     :status :marked
     :text "banana"
-    :is-hidden false}
-   {:id "1234567890"
+    ;; :is-hidden false
+    }
+   {;; :id "1234567890"
     :status :clean
     :text "cherry"
-    :is-hidden false}])
+    ;; :is-hidden false
+    }])
 
 ;; TODO: use this for small E2E tests [micro] [mini] [tiny]
 ;; (def fruit
@@ -91,7 +105,6 @@
     (is (= true (af/list-has-items-of-status example-list-first-completed-second-marked :mdone)))
     )
 
-  ;; TEMP tests
   (testing "Determine if certain status DOES NOT EXIST in a list"
     ;; list-has-none-of-status
     (is (= false (af/list-has-none-of-status example-list-all-clean :clean)))
@@ -134,3 +147,35 @@
              example-list-first-completed)))
         "Marking a list w/ one completed & two clean items works as expected"
         )))
+
+;; question: Could the state be removed/reduced here by
+;; using a threading macro? What other effective strategies
+;; are there to reduce/remove the usage of `let`?
+(defn scaffold-integration-test-1
+  "for adding items to a list"
+  []
+  ;; create new list
+  (let [my-list []]
+    ;; add a new item
+    (af/add-item-to-list!
+     my-list
+     (af/create-new-item-from-text
+      "a"))))
+
+(deftest integration-tests
+  ;; question: How are integration/E2E tests set up in an effective manner?
+  (testing "adding items to a list"
+    (is (= 
+         (scaffold-integration-test-1)
+         example-list-one-item
+         ))))
+
+(def firstThree
+  ["Write report" "Check email" "Tidy desk"])
+
+(defn scaffold-e2e-test-simple
+  [])
+
+;; (deftest end-to-end-tests
+;;   (testing "something"
+;;     (is (= 1 0))))
