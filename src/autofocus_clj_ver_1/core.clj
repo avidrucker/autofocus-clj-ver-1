@@ -81,13 +81,20 @@
   ;; note: if/when "lastDone" is implemented, new logic may need to be added
   ;;       (first markable starts looking after "lastDone", instead of index 0)
   (defn index-of-first-markable
-    "finds the first clean item in the list, and marks it"
+    "finds the first clean item in the list and returns its index"
     [input-list]
     (first
      ;; note: if you were to use maps here, you could just use `keep`
      (keep-indexed ;; item is %2, index is %1
       #(when (contains-status? %2 :clean) %1)
       input-list)))
+  
+  (defn index-of-last-marked
+    "finds the marked item closest to the end of the list and returns its index"
+    [input-list]
+    (last
+     (keep-indexed
+      #(when (contains-status? %2 :marked) %1) input-list)))
 
   ;; note: this replaces & supercedes "mark-first-item",
   ;;  "mark-item", "complete-item", and "new-item-status"
@@ -107,6 +114,20 @@
       (let [index (index-of-first-markable input-list)]
         (mod-item-status-at-index-in-list input-list index :marked))
       input-list ;; if list ISN'T auto-markable
+      ))
+  
+  (defn mark-closest-to-end-marked-item-done
+    "Changes the status of the marked item closest to
+     the end of the list as done. If no marked items
+     are found, the list is returned as-is.
+     I am calling this internally 'focusing'."
+    [input-list]
+    (if (list-has-items-of-status input-list :marked)
+      ;; mark last marked item as done
+      (let [index (index-of-last-marked input-list)]
+        (mod-item-status-at-index-in-list input-list index :done))
+      ;; else, return list as is
+      input-list
       )))
 
 (defn -main
