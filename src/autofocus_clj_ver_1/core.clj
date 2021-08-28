@@ -30,7 +30,7 @@
       :default "?"))
 
   (defn render-item-with-mark [item]
-    (str " - " (status-to-mark (:status item)) " " (:text item)))
+    (str " - " (status-to-mark (get item :status)) " " (get item :text)))
 
   (defn render-list-with-marks [input-list]
     (mapv render-item-with-mark input-list))
@@ -88,7 +88,7 @@
      (keep-indexed ;; item is %2, index is %1
       #(when (contains-status? %2 :clean) %1)
       input-list)))
-  
+
   (defn index-of-last-marked
     "finds the marked item closest to the end of the list and returns its index"
     [input-list]
@@ -115,7 +115,7 @@
         (mod-item-status-at-index-in-list input-list index :marked))
       input-list ;; if list ISN'T auto-markable
       ))
-  
+
   (defn mark-closest-to-end-marked-item-done
     "Changes the status of the marked item closest to
      the end of the list as done. If no marked items
@@ -127,8 +127,43 @@
       (let [index (index-of-last-marked input-list)]
         (mod-item-status-at-index-in-list input-list index :done))
       ;; else, return list as is
-      input-list
-      )))
+      input-list)))
+
+(defn generate-review-msg
+  [input-list current-index]
+  (let [last-marked-index (index-of-last-marked input-list)
+        last-marked-text (get (get input-list last-marked-index) :text)
+        current-text (get (get input-list current-index) :text)]
+    (str "Do you want to do '" current-text "' more than '" last-marked-text "'?"))
+  )
+
+;; TODO: implement stub
+(defn review-list
+  "takes the to-do items list to:
+   1. auto-marks the first markable index if it can
+   2. assesses whether or not the list is reviewable, and
+   3. if the list is reviewable, initiates the request to the
+       user to give user input on each reviewable item,
+       which *may* return as list with more :marked items
+       note: optional input may allow for a list of yes/no answers
+             to test functionality
+   4. if the list is not reviewable, returns back the list as-is"
+  [input-list]
+  ;; CODE GOES HERE
+  )
+
+;; TODO: implement stub
+(defn is-reviewable-list?
+  [input-list]
+  ;; CODE GOES HERE
+  )
+
+;; TODO: implement stub
+(defn get-first-reviewable-index
+  "returns (first current) index at which reviews will start"
+  [input-list]
+  ;; CODE GOES HERE
+  )
 
 (defn -main
   "runs the entire AutoFocus program"
