@@ -11,9 +11,13 @@
 
 ;; initial source template:
 ;; https://github.com/ggandor/eliza-in-clojure/blob/master/src/eliza_basic.clj
-(def exit-opt " (type Q to quit)")
-(def question-x "What is your name?")
-(def response-x "Oh, your name is ")
+(do
+  (def exit-opt " (type 'Q' to quit)")
+  (def question-x "What is your name?")
+  (def response-x "Oh, your name is ")
+  (def try-again "That's not valid input, try again.")
+  (def no-answer "You didn't type anything!")
+  (def goodbye-msg "Bye for now!"))
 
 (defn isAlphaOnly? [in]
   (=
@@ -31,7 +35,11 @@
   [in]
   (if (valid-input? in)
     (println (str response-x (clojure.string/trim in) "!"))
-    (println "That's not valid input, try again.")))
+    (doall
+     (if (empty? in)
+       (println no-answer)
+       (println (str "You typed: \"" in "\".")))
+     (println try-again))))
 
 (defn not-quitting? [in]
   (and (not= in "q") (not= in "Q")))
@@ -48,6 +56,6 @@
 
 (defn -main []
   (user-io (str question-x exit-opt))
-  (println "Bye for now!"))
+  (println goodbye-msg))
 
-;; (-main)
+(-main)
