@@ -154,6 +154,12 @@
 
 ;; TODO: implement stub
 (defn is-reviewable-list?
+  "A list is reviewable if:
+   - it has at least one marked item
+   - it has at least one unmarked item below the last marked item
+   By this definition, lists of size 0 or 1 are not reviewable,
+   and the only reviewable list of size 2 is where the first
+   item is marked and the second item is clean."
   [input-list]
   ;; CODE GOES HERE
   )
