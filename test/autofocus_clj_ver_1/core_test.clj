@@ -134,20 +134,36 @@
            (af/generate-review-msg example-list-first-marked 1))
         "Generates the correct review message."
         ))
+  
+  ;; TODO: implement is-reviewable-list? with TDD
+  (testing "Determining if a list is reviewable"
+    ;; list of size 0
+    (is (= 0 1)
+        "Correctly determines list NOT reviewable")
+    ;; lists of size 1
+    (is (= 0 1)
+        "Correctly determines list NOT reviewable")
+    ;; lists of size 2
+    (is (= 0 1)
+        "Correctly determines list NOT reviewable")
+    (is (= 0 1)
+        "Correctly determines list reviewable")
+    ;; lists of size 3
+
+    )
   )
 
 ;; question: Could the state be removed/reduced here by
 ;; using a threading macro? What other effective strategies
 ;; are there to reduce/remove the usage of `let`?
 (defn scaffold-integration-test-1
-  "for adding items to a list"
+  "makes an empty list, adds one item to it,
+   and returns the new list of size 1"
   []
-  ;; create new list
-  (let [my-list []]
-    ;; add a new item
-    (af/add-item-to-list
-     my-list
-     (af/create-new-item-from-text "a"))))
+  (af/add-item-to-list
+   [] ;; blank new empty list
+   (af/create-new-item-from-text "a") ;; newly created to-do item
+   ))
 
 (deftest integration-tests
   ;; question: How are integration/E2E tests set up in
