@@ -1,7 +1,6 @@
 (ns autofocus-clj-ver-1.core-test
   (:require [clojure.test :refer [deftest is testing]]
-            [autofocus-clj-ver-1.core :as af]
-            [clojure.string :as string]))
+            [autofocus-clj-ver-1.core :as af])
 
 (do
   (def example-item
@@ -55,11 +54,7 @@
   ;; TODO: use this for small E2E tests [micro] [mini] [tiny]
   ;; (def fruit
   ;;   '("apple" "banana" "cherry"))
-  
-  (defn stringify-list-compact
-    "Renders a list to a single-line string of only its marks"
-    [input-list]
-    (string/join " " (mapv #(af/status-to-mark (:status %)) input-list))))
+)
 
 (deftest unit-tests
   (testing "Rendering lists"
@@ -151,6 +146,8 @@
     ;; lists of size 3
 
     )
+  
+  ;; TODO: test mark-closest-to-end-marked-item-done
   )
 
 ;; question: Could the state be removed/reduced here by
