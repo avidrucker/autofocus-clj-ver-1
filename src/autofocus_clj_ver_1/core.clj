@@ -96,6 +96,13 @@
      (keep-indexed
       #(when (contains-status? %2 :marked) %1) input-list)))
 
+  (defn index-of-last-clean
+    "finds the clean item closest to the end of the list and returns its index"
+    [input-list]
+    (last
+     (keep-indexed
+      #(when (contains-status? %2 :clean) %1) input-list)))
+
   ;; note: this replaces & supercedes "mark-first-item",
   ;;  "mark-item", "complete-item", and "new-item-status"
   (defn mod-item-status-at-index-in-list
@@ -152,6 +159,16 @@
   ;; CODE GOES HERE
   )
 
+(defn stringify-list-compact
+    "Renders a list to a single-line string of only its marks"
+    [input-list]
+    (string/join " " (mapv #(status-to-mark (:status %)) input-list)))
+
+;; TODO: implement stub
+(defn count-items-of-status [input-list input-status]
+  (count (keep-indexed
+   #(when (contains-status? %2 input-status) %1) input-list)))
+
 ;; TODO: implement stub
 (defn is-reviewable-list?
   "A list is reviewable if:
@@ -162,6 +179,24 @@
    item is marked and the second item is clean."
   [input-list]
   ;; CODE GOES HERE
+  (cond
+    (< 2 (count input-list)) false
+    (and
+     (= 2 (count input-list))
+     (= "[o] [ ]" (stringify-list-compact input-list))) true
+    (and
+     (> 2 (count input-list))
+     ;; - 1 or more clean items AND 1 or more marked items exist 
+     ;; - the index of the last clean item is bigger than
+     ;;   the index of the last marked item
+     (and
+      (pos-int? (count-items-of-status input-list :clean))
+      (pos-int? (count-items-of-status input-list :marked))
+      (> (index-of-last-clean input-list)
+         (index-of-last-marked input-list)))
+     ) true
+    :else false
+    )
   )
 
 ;; TODO: implement stub
