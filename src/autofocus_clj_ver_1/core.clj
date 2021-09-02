@@ -190,11 +190,11 @@
     (and
      (> 2 (count input-list))
      ;; - 1 or more clean items AND 1 or more marked items exist 
-     ;; - the index of the last clean item is bigger than
-     ;;   the index of the last marked item
      (and
       (pos-int? (count-items-of-status input-list :clean))
       (pos-int? (count-items-of-status input-list :marked))
+      ;; - the index of the last clean item is bigger than
+      ;;   the index of the last marked item
       (> (index-of-last-clean input-list)
          (index-of-last-marked input-list)))
      ) true
