@@ -119,6 +119,10 @@
     [in-list in-index in-status]
     (assoc-in in-list [in-index :status] in-status))
 
+  (defn change-status-of-item
+    [input-item input-status]
+    (assoc input-item :status input-status))
+
   (defn mark-first-markable
     "Marks the first markable item of a list.
    If no markable items are found, the list is returned as-is.
@@ -154,28 +158,12 @@
     (str "Do you want to do '" current-text "' more than '"
          last-marked-text "'?")))
 
-;; TODO: implement stub
-(defn review-list
-  "takes the to-do items list to:
-   1. auto-marks the first markable index if it can
-   2. assesses whether or not the list is reviewable, and
-   3. if the list is reviewable, initiates the request to the
-       user to give user input on each reviewable item,
-       which *may* return as list with more :marked items
-       note: optional input may allow for a list of yes/no answers
-             to test functionality
-   4. if the list is not reviewable, returns back the list as-is"
-  [input-list]
-  ;; CODE GOES HERE
-  )
-
 (defn stringify-list-compact
     "Renders a list to a single-line string of only its marks"
     [input-list]
     (string/join 
      " " 
      (mapv #(status-to-mark (:status %)) input-list)))
-
 
 (defn count-items-of-status [input-list input-status]
   (count (keep-indexed-status input-list input-status)))
@@ -221,6 +209,8 @@
 ;; (get-next-biggest-number '(1 3 5) 2) ;; => 3
 ;; (get-next-biggest-number '(5 7 9 11 12) 10) ;; => 11
 
+;; question: Is this necessary? Could be slots...
+;; TODO: use this to set "cursor" for generating questions
 (defn get-first-reviewable-index
   "Returns (first current) index at which reviews will start.
    The first reviewable index is always the first clean item
@@ -229,8 +219,53 @@
   (let [list-of-clean-indecies (keep-indexed-status input-list :clean)
         last-marked (index-of-last-marked input-list)]
     (get-next-biggest-number list-of-clean-indecies last-marked)
-    )
-  )
+    ))
+
+(defn apply-answers
+  "Takes in an auto-marked to-do list and a list of answers.
+   If the answer list is empty, the list is returned as is.
+   For each answer in answers, clean items in the to-do list
+   will either be marked ('y' or 'yes') or ignored and left
+   as-is ('n' or 'no'). If an answer of 'q' or 'quit' is
+   encountered, the to-do list with it's current modifications
+   will be returned, even if there are still more clean items.
+   Answers that exceed the count of clean items will be ignored."
+  [input-list answers]
+  (if (zero? (count answers))
+    input-list
+    (let [cleans (keep-indexed-status input-list :clean)
+          modifications (zipmap cleans answers)]
+      (vec (map-indexed
+            ;; TODO: modify this logic so that way
+            ;;       'n' answers lead to no marking
+            ;;       and 'q' answers lead to short-circuiting
+            #(if (and (contains? modifications %)
+                      (= "y" (get modifications %)))
+               (change-status-of-item (get input-list %) :marked)
+               %2)
+            input-list)))))
+
+;; TODO: implement stub
+(defn review-list
+  "takes the to-do items list to:
+   1. auto-marks the first markable index if it can
+   2. assesses whether or not the list is reviewable, and
+   3. if the list is reviewable, initiates the request to the
+       user to give user input on each reviewable item,
+       which *may* return as list with more :marked items
+       note: optional input may allow for a list of yes/no answers
+             to test functionality
+   4. if the list is not reviewable, returns back the list as-is"
+  [input-list answers]
+  ;; CODE GOES HERE
+  (let [
+        ;; step 1: auto-mark if possible
+        auto-marked-list (mark-first-markable input-list)]
+    ;; step 2: assess whether list is reviewable
+    (if (is-reviewable-list? auto-marked-list)
+      (apply-answers auto-marked-list answers) ;; conduct reviews
+      auto-marked-list ;; do not conduct reviews
+      )))
 
 (defn -main
   "runs the entire AutoFocus program"
