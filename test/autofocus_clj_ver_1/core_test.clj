@@ -1,6 +1,6 @@
 (ns autofocus-clj-ver-1.core-test
   (:require [clojure.test :refer [deftest is testing]]
-            [autofocus-clj-ver-1.core :as af])
+            [autofocus-clj-ver-1.core :as af]))
 
 (do
   (def example-item
@@ -20,7 +20,7 @@
       :text "b"}
      {:status :clean
       :text "c"}])
-  
+
   (def example-list-first-marked
     [{:status :marked
       :text "a"}
@@ -44,17 +44,59 @@
       :text "b"}
      {:status :clean
       :text "c"}])
+  
+  (def example-list-three-items-all-completed
+    [{:status :done
+      :text "a"}
+     {:status :done
+      :text "b"}
+     {:status :done
+      :text "c"}])
+  
+  (def example-list-three-items-first-and-last-marked
+    [{:status :marked
+      :text "a"}
+     {:status :clean
+      :text "b"}
+     {:status :marked
+      :text "c"}])
+  
+  (def example-list-three-items-first-marked-last-completed
+    [{:status :marked
+      :text "a"}
+     {:status :clean
+      :text "b"}
+     {:status :done
+      :text "c"}])
+
+  (def example-list-two-items-first-completed
+    [{:status :done
+      :text "a"}
+     {:status :clean
+      :text "b"}])
+
+  (def example-list-two-items-first-marked
+    [{:status :marked
+      :text "a"}
+     {:status :clean
+      :text "b"}])
+  
+  (def example-list-two-items-first-completed-second-marked
+    [{:status :done
+      :text "a"}
+     {:status :marked
+      :text "b"}])
 
   (def quick-three
     ["a" "b" "c"])
 
-  (def regular-three
-    ["Write report" "Check email" "Tidy desk"])
-  
+  ;; (def regular-three
+  ;;   ["Write report" "Check email" "Tidy desk"])
+
   ;; TODO: use this for small E2E tests [micro] [mini] [tiny]
   ;; (def fruit
   ;;   '("apple" "banana" "cherry"))
-)
+  )
 
 (deftest unit-tests
   (testing "Rendering lists"
@@ -69,28 +111,53 @@
     (is
      (= " - [ ] a\n - [ ] b\n - [ ] c"
         (af/stringify-list example-list-all-clean))
-     "Rendering a list that has only clean items works as expected")
+     "Rendering a list that has only 
+      clean items works as expected")
     (is
      (= "[ ] [ ] [ ]"
-        (stringify-list-compact example-list-all-clean))
-     "Compact-rendering a list with three clean items works as expected"))
+        (af/stringify-list-compact example-list-all-clean))
+     "Compact-rendering a list with 
+      three clean items works as expected"))
 
   (testing "Determine if certain status exists in a list"
-    (is (= true (af/list-has-items-of-status example-list-all-clean :clean)))
-    (is (= false (af/list-has-items-of-status example-list-all-clean :done)))
-    (is (= false (af/list-has-items-of-status example-list-first-completed :marked)))
-    (is (= true (af/list-has-items-of-status example-list-first-completed-second-marked :clean)))
-    (is (= true (af/list-has-items-of-status example-list-first-completed-second-marked :marked)))
-    (is (= true (af/list-has-items-of-status example-list-first-completed-second-marked :done))))
+    (is (= true (af/list-has-items-of-status
+                 example-list-all-clean 
+                 :clean)))
+    (is (= false (af/list-has-items-of-status
+                  example-list-all-clean 
+                  :done)))
+    (is (= false (af/list-has-items-of-status
+                  example-list-first-completed 
+                  :marked)))
+    (is (= true (af/list-has-items-of-status
+                 example-list-first-completed-second-marked 
+                 :clean)))
+    (is (= true (af/list-has-items-of-status
+                 example-list-first-completed-second-marked 
+                 :marked)))
+    (is (= true (af/list-has-items-of-status
+                 example-list-first-completed-second-marked 
+                 :done))))
 
   (testing "Determine if certain status DOES NOT EXIST in a list"
-    ;; list-has-none-of-status
-    (is (= false (af/list-has-none-of-status example-list-all-clean :clean)))
-    (is (= true (af/list-has-none-of-status example-list-all-clean :done)))
-    (is (= true (af/list-has-none-of-status example-list-first-completed :marked)))
-    (is (= false (af/list-has-none-of-status example-list-first-completed-second-marked :clean)))
-    (is (= false (af/list-has-none-of-status example-list-first-completed-second-marked :marked)))
-    (is (= false (af/list-has-none-of-status example-list-first-completed-second-marked :done))))
+    (is (= false (af/list-has-none-of-status 
+                  example-list-all-clean 
+                  :clean)))
+    (is (= true (af/list-has-none-of-status 
+                 example-list-all-clean 
+                 :done)))
+    (is (= true (af/list-has-none-of-status 
+                 example-list-first-completed 
+                 :marked)))
+    (is (= false (af/list-has-none-of-status 
+                  example-list-first-completed-second-marked 
+                  :clean)))
+    (is (= false (af/list-has-none-of-status 
+                  example-list-first-completed-second-marked 
+                  :marked)))
+    (is (= false (af/list-has-none-of-status 
+                  example-list-first-completed-second-marked 
+                  :done))))
 
   (testing "Determining if a list is auto-markable"
     (is (= false
@@ -114,40 +181,62 @@
 
   (testing "Marking first markable item in a list"
     (is (= "[o] [ ] [ ]"
-           (stringify-list-compact
+           (af/stringify-list-compact
             (af/mark-first-markable
              example-list-all-clean)))
-        "Marking a list that has only clean items works as expected")
+        "Marking a list that has only clean 
+         items works as expected")
     (is (= "[x] [o] [ ]"
-           (stringify-list-compact
+           (af/stringify-list-compact
             (af/mark-first-markable
              example-list-first-completed)))
-        "Marking a list w/ one completed & two clean items works as expected"))
-  
+        "Marking a list w/ one completed & two 
+         clean items works as expected"))
+
   (testing "Generating review questions"
     (is (= "Do you want to do 'b' more than 'a'?"
            (af/generate-review-msg example-list-first-marked 1))
-        "Generates the correct review message."
-        ))
-  
+        "Generates the correct review message."))
+
   ;; TODO: implement is-reviewable-list? with TDD
   (testing "Determining if a list is reviewable"
     ;; list of size 0
-    (is (= 0 1)
+    (is (= false (af/is-reviewable-list? example-empty-list))
         "Correctly determines list NOT reviewable")
     ;; lists of size 1
-    (is (= 0 1)
+    (is (= false (af/is-reviewable-list? example-list-one-item))
         "Correctly determines list NOT reviewable")
     ;; lists of size 2
-    (is (= 0 1)
+    (is (= false (af/is-reviewable-list?
+                  example-list-two-items-first-completed))
         "Correctly determines list NOT reviewable")
-    (is (= 0 1)
-        "Correctly determines list reviewable")
-    ;; lists of size 3
+    (is (= true (af/is-reviewable-list?
+                 example-list-two-items-first-marked))
+        "Correctly determines that list IS reviewable")
 
-    )
+    ;; lists of size 3
+    ;; yes: example-list-first-marked
+    ;; yes: example-list-first-completed-second-marked
+    ;; no: example-list-three-items-all-completed
+    ;; no: example-list-three-items-first-and-last-marked
+    (is (= true (af/is-reviewable-list?
+                 example-list-first-marked))
+        "Correctly determines that list IS reviewable")
+    (is (= true (af/is-reviewable-list?
+                 example-list-first-completed-second-marked))
+        "Correctly determines that list IS reviewable")
+    (is (= false (af/is-reviewable-list?
+                  example-list-three-items-all-completed))
+        "Correctly determines list NOT reviewable")
+    (is (= false (af/is-reviewable-list?
+                  example-list-three-items-first-and-last-marked))
+        "Correctly determines list NOT reviewable"))
   
-  ;; TODO: test mark-closest-to-end-marked-item-done
+  (testing "Marking the last marked item as done"
+    (is (= example-list-three-items-first-marked-last-completed
+           (af/mark-closest-to-end-marked-item-done
+            example-list-three-items-first-and-last-marked))
+        "Correctly marked the last item as done"))
   )
 
 ;; question: Could the state be removed/reduced here by
