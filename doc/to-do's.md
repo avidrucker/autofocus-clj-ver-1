@@ -58,11 +58,22 @@
 
 - [x] Create review strings from current list state
 
-- [ ] Determine whether a list is reviewable
+- [x] Determine whether a list is reviewable
 
-    - [ ] Implement `is-reviewable-list?`
+    - [x] Implement `is-reviewable-list?`
 
-- [ ] Question: How can reviewing be made interruptable / cancellable while also being functionally pure with separation of concerns? (context: in the past, this seems to require both IO and while loops)
+- [x] Implement reviewing of a list by entering a list of yes/no/quit strings ("y", "n", or "q")
+
+- [x] Question: How can reviewing be made interruptible / cancellable while also being functionally pure with separation of concerns? (context: in the past, this seems to require both IO and while loops)
+
+    - [x] Answer: Generate the full list of questions up front when starting a review session. Next, once you are done reviewing, submit the list of inputted yes/no/quit choices to update the to-do list.
+
+- [ ] Enable user to focus on and complete "priority" items (marked items closest to the end of the list)
+
+    - [ ] Enable user to review their items in the command line application
+        - [ ] Enable user to input text for a new to-do item manually in the console [IO]
+            - [ ] Enable user to quit the application by using a menu choice
+                - [ ] Implement a user menu interface, which offers the user the choice to: enter a new to-do item, review their list, focus on the prioritized item (marked item closest to the end of the list), or quit
 
 - [ ] Question: Can state be removed/reduced using a threading macro? What other effective strategies are there to reduce/remove the usage of `let`? See `scaffold-e2e-test-simple`
 
@@ -71,8 +82,6 @@
     - [x] IO (printing, getting user input)
     - [x] demos
     - [x] domain logic
-
-- [ ] Enable user to input text for a new to-do item manually in the console [IO]
 
 - [x] Brainstorm clearer naming conventions for to-do item statuses: "unmarked", "dotted", and "completed" [readability]
 
