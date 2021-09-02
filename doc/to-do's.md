@@ -64,6 +64,8 @@
 
 - [ ] Question: How can reviewing be made interruptable / cancellable while also being functionally pure with separation of concerns? (context: in the past, this seems to require both IO and while loops)
 
+- [ ] Question: Can state be removed/reduced using a threading macro? What other effective strategies are there to reduce/remove the usage of `let`? See `scaffold-e2e-test-simple`
+
 - [x] Break code into three namespaces:
 
     - [x] IO (printing, getting user input)

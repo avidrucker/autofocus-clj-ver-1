@@ -239,9 +239,6 @@
         "Correctly marked the last item as done"))
   )
 
-;; question: Could the state be removed/reduced here by
-;; using a threading macro? What other effective strategies
-;; are there to reduce/remove the usage of `let`?
 (defn scaffold-integration-test-1
   "makes an empty list, adds one item to it,
    and returns the new list of size 1"
@@ -264,7 +261,8 @@
 (defn scaffold-e2e-test-simple
   "temporary setup function to scaffold e2e tests"
   []
-  (let [item-list (map af/create-new-item-from-text quick-three)]
+  (let [item-list 
+        (map af/create-new-item-from-text quick-three)]
     (vec (flatten (into []
           (map #(af/add-item-to-list [] %)
                item-list))))))
