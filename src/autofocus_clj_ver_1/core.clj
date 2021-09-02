@@ -136,6 +136,7 @@
       ;; else, return list as is
       input-list)))
 
+
 (defn generate-review-msg
   [input-list current-index]
   (let [last-marked-index (index-of-last-marked input-list)
@@ -162,7 +163,9 @@
 (defn stringify-list-compact
     "Renders a list to a single-line string of only its marks"
     [input-list]
-    (string/join " " (mapv #(status-to-mark (:status %)) input-list)))
+    (string/join 
+     " " 
+     (mapv #(status-to-mark (:status %)) input-list)))
 
 ;; TODO: implement stub
 (defn count-items-of-status [input-list input-status]
