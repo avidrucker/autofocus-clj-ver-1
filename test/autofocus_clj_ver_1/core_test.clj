@@ -237,6 +237,14 @@
            (af/mark-closest-to-end-marked-item-done
             example-list-three-items-first-and-last-marked))
         "Correctly marked the last item as done"))
+  
+  ;;;;
+  (testing "Selecting the first index to start reviewing"
+    (is (= 1 (af/get-first-reviewable-index 
+              example-list-first-marked)))
+    (is (= 2 (af/get-first-reviewable-index
+              example-list-first-completed-second-marked)))
+    )
   )
 
 (defn scaffold-integration-test-1
