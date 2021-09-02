@@ -69,39 +69,47 @@
       (zero? (count input-list)) false
       (and
        ;; must contain clean items
-       ;; TIL: You can check for key value pairs in a list of hashmaps by using
-       ;;      some?, some, a key look up, and a value comparison
+       ;; TIL: You can check for key value pairs in a list of 
+       ;;  hashmaps by using some?, some, a key look up, 
+       ;;  and a value comparison
        (list-has-items-of-status input-list :clean)
        ;; must not contain any marked items
        (list-has-none-of-status input-list :marked)) true
       :else false ;; default else
       ))
 
+  (defn keep-indexed-status [input-list input-status]
+    (keep-indexed
+     ;; note: if you were to use maps here, 
+     ;;  you could just use `keep`
+     ;; item is %2, index is %1
+     #(when (contains-status? %2 input-status) %1) 
+     input-list))
+
   ;; note: see design decision 2
-  ;; note: if/when "lastDone" is implemented, new logic may need to be added
-  ;;       (first markable starts looking after "lastDone", instead of index 0)
+  ;; note: if/when "lastDone" is implemented, new logic may need 
+  ;;       to be added (first markable starts looking after 
+  ;;       "lastDone", instead of index 0)
   (defn index-of-first-markable
-    "finds the first clean item in the list and returns its index"
+    "finds the first clean item in the list 
+     and returns its index"
     [input-list]
     (first
-     ;; note: if you were to use maps here, you could just use `keep`
-     (keep-indexed ;; item is %2, index is %1
-      #(when (contains-status? %2 :clean) %1)
-      input-list)))
+     (keep-indexed-status input-list :clean)))
 
   (defn index-of-last-marked
-    "finds the marked item closest to the end of the list and returns its index"
+    "finds the marked item closest to the end 
+     of the list and returns its index"
     [input-list]
     (last
-     (keep-indexed
-      #(when (contains-status? %2 :marked) %1) input-list)))
+     (keep-indexed-status input-list :marked)))
 
   (defn index-of-last-clean
-    "finds the clean item closest to the end of the list and returns its index"
+    "finds the clean item closest to the end 
+     of the list and returns its index"
     [input-list]
     (last
-     (keep-indexed
-      #(when (contains-status? %2 :clean) %1) input-list)))
+     (keep-indexed-status input-list :clean)))
 
   ;; note: this replaces & supercedes "mark-first-item",
   ;;  "mark-item", "complete-item", and "new-item-status"
@@ -134,7 +142,8 @@
       (let [index (index-of-last-marked input-list)]
         (mod-item-status-at-index-in-list input-list index :done))
       ;; else, return list as is
-      input-list)))
+      input-list))
+  )
 
 
 (defn generate-review-msg
@@ -142,8 +151,8 @@
   (let [last-marked-index (index-of-last-marked input-list)
         last-marked-text (get (get input-list last-marked-index) :text)
         current-text (get (get input-list current-index) :text)]
-    (str "Do you want to do '" current-text "' more than '" last-marked-text "'?"))
-  )
+    (str "Do you want to do '" current-text "' more than '"
+         last-marked-text "'?")))
 
 ;; TODO: implement stub
 (defn review-list
@@ -167,10 +176,9 @@
      " " 
      (mapv #(status-to-mark (:status %)) input-list)))
 
-;; TODO: implement stub
+
 (defn count-items-of-status [input-list input-status]
-  (count (keep-indexed
-   #(when (contains-status? %2 input-status) %1) input-list)))
+  (count (keep-indexed-status input-list input-status)))
 
 ;; TODO: implement stub
 (defn is-reviewable-list?
@@ -202,11 +210,26 @@
     )
   )
 
-;; TODO: implement stub
+;; for a list of numbers
+(defn get-next-biggest-number
+  "For a list of numbers XS and a given number Y,
+   returns the next largest number after Y from XS
+   Eg: {xs: (1 3 5)} and {y: 2} ==> 3"
+  [xs y]
+  (first (filter #(< y %) xs)))
+
+;; (get-next-biggest-number '(1 3 5) 2) ;; => 3
+;; (get-next-biggest-number '(5 7 9 11 12) 10) ;; => 11
+
 (defn get-first-reviewable-index
-  "returns (first current) index at which reviews will start"
+  "Returns (first current) index at which reviews will start.
+   The first reviewable index is always the first clean item
+   after the last marked item in a list."
   [input-list]
-  ;; CODE GOES HERE
+  (let [list-of-clean-indecies (keep-indexed-status input-list :clean)
+        last-marked (index-of-last-marked input-list)]
+    (get-next-biggest-number list-of-clean-indecies last-marked)
+    )
   )
 
 (defn -main
