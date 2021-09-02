@@ -44,7 +44,23 @@
       :text "b"}
      {:status :clean
       :text "c"}])
-  
+
+(def example-list-three-items-first-two-marked
+  [{:status :marked
+    :text "a"}
+   {:status :marked
+    :text "b"}
+   {:status :clean
+    :text "c"}])
+
+(def example-list-three-items-all-marked
+  [{:status :marked
+    :text "a"}
+   {:status :marked
+    :text "b"}
+   {:status :marked
+    :text "c"}])
+
   (def example-list-three-items-all-completed
     [{:status :done
       :text "a"}
@@ -238,12 +254,34 @@
             example-list-three-items-first-and-last-marked))
         "Correctly marked the last item as done"))
   
-  ;;;;
   (testing "Selecting the first index to start reviewing"
     (is (= 1 (af/get-first-reviewable-index 
               example-list-first-marked)))
     (is (= 2 (af/get-first-reviewable-index
               example-list-first-completed-second-marked)))
+    )
+  
+  ;; TODO: convert the example below to a test
+  ;; EXAMPLE:
+  ;; (apply-answers
+  ;;  example-list-first-marked '("y" "y"))
+  ;; modifications => {1 "y", 2 "y"}
+  ;; applied-answers => [{:status :marked, :text "a"}
+  ;;                     {:status :marked, :text "b"} 
+  ;;                     {:status :marked, :text "c"}]
+  (testing "Applying answers to a list"
+    (is (= example-list-three-items-all-marked
+           (af/apply-answers
+            example-list-first-marked '("y" "y")))
+        "Correctly modifies a list")
+    (is (= example-list-three-items-first-and-last-marked
+           (af/apply-answers
+            example-list-first-marked '("n" "y")))
+        "Correctly modifies a list")
+    (is (= example-list-three-items-first-two-marked
+           (af/apply-answers
+            example-list-first-marked '("y" "q")))
+        "Correctly modifies a list")
     )
   )
 
