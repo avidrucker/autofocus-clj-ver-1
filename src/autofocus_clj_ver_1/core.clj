@@ -156,7 +156,6 @@
       input-list))
   )
 
-
 (defn generate-review-msg
   [input-list current-index]
   (let [last-marked-index (index-of-last-marked input-list)
@@ -175,7 +174,6 @@
 (defn count-items-of-status [input-list input-status]
   (count (keep-indexed-status input-list input-status)))
 
-;; TODO: implement stub
 (defn is-reviewable-list?
   "A list is reviewable if:
    - it has at least one marked item
@@ -184,7 +182,6 @@
    and the only reviewable list of size 2 is where the first
    item is marked and the second item is clean."
   [input-list]
-  ;; CODE GOES HERE
   (cond
     (> 2 (count input-list)) false
     (and
@@ -251,7 +248,6 @@
                          input-list))]
       new-list)))
 
-;; TODO: implement stub
 (defn review-list
   "takes the to-do items list to:
    1. auto-marks the first markable index if it can
@@ -263,7 +259,6 @@
              to test functionality
    4. if the list is not reviewable, returns back the list as-is"
   [input-list answers]
-  ;; CODE GOES HERE
   (let [
         ;; step 1: auto-mark if possible
         auto-marked-list (mark-first-markable input-list)]
@@ -278,8 +273,7 @@
         ;; (println "not revewing...")
         (println (stringify-list-compact auto-marked-list))
         auto-marked-list ;; do not conduct reviews
-        )
-      )))
+        ))))
 
 (defn -main
   "runs the entire AutoFocus program"
