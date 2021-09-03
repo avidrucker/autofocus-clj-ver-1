@@ -216,7 +216,6 @@
            (af/generate-review-msg example-list-first-marked 1))
         "Generates the correct review message."))
 
-  ;; TODO: implement is-reviewable-list? with TDD
   (testing "Determining if a list is reviewable"
     ;; list of size 0
     (is (= false (af/is-reviewable-list? example-empty-list))
@@ -254,7 +253,7 @@
     (is (= example-list-three-items-first-marked-last-completed
            (af/mark-closest-to-end-marked-item-done
             example-list-three-items-first-and-last-marked))
-        "Correctly marked the last item as done"))
+        "Correctly marks the last item as done"))
   
   (testing "Selecting the first index to start reviewing"
     (is (= 1 (af/get-first-reviewable-index 
@@ -284,6 +283,21 @@
            (af/apply-answers
             example-list-first-marked '("y" "q")))
         "Correctly modifies a list")
+    )
+  
+  (testing "Focusing on a list"
+    (is (= example-list-three-items-first-marked-last-completed
+           (af/focus-on-list
+            example-list-three-items-first-and-last-marked))
+        "Correctly marks the last item as done when list IS focusable")
+    (is (= example-list-three-items-all-completed
+           (af/focus-on-list
+            example-list-three-items-all-completed))
+        "Correctly does nothing when list is NOT focusable")
+    (is (= example-list-all-clean
+           (af/focus-on-list
+            example-list-all-clean))
+        "Correctly does nothing when list is NOT focusable")
     )
   )
 
