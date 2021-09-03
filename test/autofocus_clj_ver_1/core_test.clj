@@ -187,13 +187,15 @@
             example-list-first-completed)))
     (is (= false
            (af/is-auto-markable-list?
-            example-list-first-completed-second-marked))))
+            example-list-first-completed-second-marked)))
+    )
 
   (testing "Finding first markable item in a list"
     (is (= 0 (af/index-of-first-markable
               example-list-all-clean)))
     (is (= 1 (af/index-of-first-markable
-              example-list-first-completed))))
+              example-list-first-completed)))
+    )
 
   (testing "Marking first markable item in a list"
     (is (= "[o] [ ] [ ]"
@@ -301,7 +303,8 @@
     (is (=
          (scaffold-integration-test-1)
          example-list-one-item)
-        "works as expected")))
+        "works as expected"))
+  )
 
 ;; TODO: replace this with actual API once it is built
 (defn scaffold-e2e-test-simple
@@ -311,14 +314,17 @@
         (map af/create-new-item-from-text quick-three)]
     (vec (flatten (into []
           (map #(af/add-item-to-list [] %)
-               item-list))))))
+               item-list)))))
+  )
 
 ;; TODO: use scaffold-e2e-test-simple to set up first e2e test
 (deftest end-to-end-tests
   (testing "first simple e2e test"
     (is (= 
-         " - [o] a\n - [ ] b\n - [ ] c"
-         (af/stringify-list
+         "[o] [o] [o]"
+         (af/stringify-list-compact
           ;; TODO: replace `mark-first-markable` with `review-list` 
-          (af/mark-first-markable 
-           (scaffold-e2e-test-simple)))))))
+          (af/review-list 
+           (scaffold-e2e-test-simple) ["y" "y"]))))
+    )
+  )
