@@ -130,9 +130,16 @@
     [input-list]
     (if (is-auto-markable-list? input-list)
     ;; note: lets tend to be constant time to create & store (variable allocation)
-      (let [index (index-of-first-markable input-list)]
-        (mod-item-status-at-index-in-list input-list index :marked))
-      input-list ;; if list ISN'T auto-markable
+      ;; TODO: remove do call
+      (do
+        ;; (println "is auto-markable list...")
+        (let [index (index-of-first-markable input-list)]
+          (mod-item-status-at-index-in-list input-list index :marked)))
+      ;; TODO: remove do call
+      (do
+        ;; (println "is NOT auto-markable list...")
+        input-list ;; if list ISN'T auto-markable
+        )
       ))
 
   (defn mark-closest-to-end-marked-item-done
@@ -179,21 +186,19 @@
   [input-list]
   ;; CODE GOES HERE
   (cond
-    (< 2 (count input-list)) false
+    (> 2 (count input-list)) false
     (and
      (= 2 (count input-list))
      (= "[o] [ ]" (stringify-list-compact input-list))) true
     (and
-     (> 2 (count input-list))
+     (< 2 (count input-list))
      ;; - 1 or more clean items AND 1 or more marked items exist 
-     (and
-      (pos-int? (count-items-of-status input-list :clean))
-      (pos-int? (count-items-of-status input-list :marked))
+      (< 0 (count-items-of-status input-list :clean))
+      (< 0 (count-items-of-status input-list :marked))
       ;; - the index of the last clean item is bigger than
       ;;   the index of the last marked item
       (> (index-of-last-clean input-list)
-         (index-of-last-marked input-list)))
-     ) true
+         (index-of-last-marked input-list))) true
     :else false
     )
   )
@@ -234,16 +239,17 @@
   (if (zero? (count answers))
     input-list
     (let [cleans (keep-indexed-status input-list :clean)
-          modifications (zipmap cleans answers)]
-      (vec (map-indexed
+          modifications (zipmap cleans answers)
+          new-list (vec (map-indexed
             ;; TODO: modify this logic so that way
             ;;       'n' answers lead to no marking
             ;;       and 'q' answers lead to short-circuiting
-            #(if (and (contains? modifications %)
-                      (= "y" (get modifications %)))
-               (change-status-of-item (get input-list %) :marked)
-               %2)
-            input-list)))))
+                         #(if (and (contains? modifications %)
+                                   (= "y" (get modifications %)))
+                            (change-status-of-item (get input-list %) :marked)
+                            %2)
+                         input-list))]
+      new-list)))
 
 ;; TODO: implement stub
 (defn review-list
@@ -263,8 +269,16 @@
         auto-marked-list (mark-first-markable input-list)]
     ;; step 2: assess whether list is reviewable
     (if (is-reviewable-list? auto-marked-list)
-      (apply-answers auto-marked-list answers) ;; conduct reviews
-      auto-marked-list ;; do not conduct reviews
+      (do
+        ;; TODO: remove println debugging
+        ;; (println "reviewing...")
+        (apply-answers auto-marked-list answers)) ;; conduct reviews
+      (do
+        ;; TODO: remove println debugging
+        ;; (println "not revewing...")
+        (println (stringify-list-compact auto-marked-list))
+        auto-marked-list ;; do not conduct reviews
+        )
       )))
 
 (defn -main
