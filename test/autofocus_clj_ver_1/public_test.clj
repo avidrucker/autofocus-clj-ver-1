@@ -39,22 +39,64 @@
          eg/example-list-one-item)
         "works as expected")))
 
-;; TODO: replace this with actual API once it is built
-(defn scaffold-e2e-test-simple
+;; TODO: replace this with external facing API once it is built
+(defn scaffold-list-from-strings
   "temporary setup function to scaffold e2e tests"
-  []
+  [input-strings]
   (let [item-list
-        (map af/create-new-item-from-text eg/quick-three)]
+        (map af/create-new-item-from-text input-strings)]
     (vec (flatten (into []
                         (map #(af/add-item-to-list [] %)
                              item-list))))))
 
-;; TODO: use scaffold-e2e-test-simple to set up first e2e test
 (deftest end-to-end-tests
   (testing "first simple e2e test"
     (is (=
-         "[o] [o] [o]"
+         "[o] [o] [x]"
          (af/stringify-list-compact
-          ;; TODO: replace `mark-first-markable` with `review-list` 
-          (pub/review-list
-           (scaffold-e2e-test-simple) ["y" "y"]))))))
+          (pub/focus-on-list
+           (pub/review-list
+            (scaffold-list-from-strings eg/quick-three) ["y" "y"]))))))
+
+  ;; TODO: implement this test stub
+  ;; first review: ["n", "y", "n", "y", "q"]
+  ;; => "[o] [ ] [o] [ ] [o] [ ] [ ] [ ] [ ] [ ]"
+  ;; second review: ["n", "n", "n", "n", "y"]
+  ;; => "[o] [ ] [o] [ ] [x] [ ] [ ] [ ] [ ] [o]"
+  ;; third focus:
+  ;; => "[o] [ ] [x] [ ] [x] [ ] [ ] [ ] [ ] [x]"
+  ;; third review: ["n", "n", "y", "n", "y"]
+  ;; => "[o] [ ] [x] [ ] [x] [ ] [o] [ ] [o] [x]"
+  ;; fourth and fifth focuses:
+  ;; => "[o] [ ] [x] [ ] [x] [ ] [x] [ ] [x] [x]"
+  (testing "long e2e test"
+    (is (= "[ ] [ ] [ ] [ ] [ ] [ ] [ ] [ ] [ ] [ ]"
+           (af/stringify-list-compact (scaffold-list-from-strings eg/long-e2e-list)))))
+  ;; FIRST REVIEW
+  ;; "Now ask yourself 'What do I want to do more than Email?'
+	;; You decide you want to do Voicemail more than Email.
+	;; Put a dot in front of it.
+	;; Now ask yourself 'What do I want to do more than Voicemail?'
+	;; You decide you want to tidy your desk."
+	;; review items, saying yes only for 3rd & 5th items
+  ;; FIRST FOCUS
+  ;; Do the "Tidy Desk" task (last marked item / CMWTD)
+  ;; SECOND REVIEW
+  ;; "Now start again from Tidy Desk (i.e. the last task you did).
+	;; and ask yourself 'What do I want to do more than Voicemail?'
+	;; The only task you want to do more than Voicemail is Back Up."
+	;; review items, saying yes only to last item (in this review it will be the 5th)
+  ;; SECOND FOCUS
+  ;; "Do it." (Back Up)
+  ;; THIRD FOCUS
+  ;; "There are no further tasks beyond Back Up, so there is no
+	;; need to check whether you want to do any tasks more than
+	;; you want to do Voicemail. You just do it."
+  ;; THIRD REVIEW
+  ;; "You already know that you want to do Email more than In-tray, so you start
+	;; scanning from the first task after the task you have just done (Voicemail)."
+	;; "You decide you want to do Make Dental Appointment"
+  ;; FOURTH AND FIFTH FOCUSES:
+  ;; As this is the last task on the list you do it immediately,
+	;; and then do Make Dental Appointment immediately too.
+  )
