@@ -106,6 +106,10 @@
   (def quick-three
     ["a" "b" "c"])
 
+  (def long-e2e-list
+    ["Email" "In-Tray" "Voicemail" "Project X Report" "Tidy Desk"
+     "Call Dissatisfied Customer" "Make Dental Appointment"
+     "File Invoices" "Discuss Project Y with Bob" "Back Up"])
   ;; (def regular-three
   ;;   ["Write report" "Check email" "Tidy desk"])
 
