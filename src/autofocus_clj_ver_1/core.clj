@@ -144,16 +144,11 @@
 
   (defn mark-closest-to-end-marked-item-done
     "Changes the status of the marked item closest to
-     the end of the list as done. If no marked items
-     are found, the list is returned as-is.
-     I am calling this internally 'focusing'."
+     the end of the list as done."
     [input-list]
-    (if (list-has-items-of-status input-list :marked)
-      ;; mark last marked item as done
+    ;; mark last marked item as done
       (let [index (index-of-last-marked input-list)]
-        (mod-item-status-at-index-in-list input-list index :done))
-      ;; else, return list as is
-      input-list))
+        (mod-item-status-at-index-in-list input-list index :done)))
   )
 
 (defn generate-review-msg
@@ -173,6 +168,10 @@
 
 (defn count-items-of-status [input-list input-status]
   (count (keep-indexed-status input-list input-status)))
+
+(defn is-focusable-list?
+  [input-list]
+  (< 0 (count-items-of-status input-list :marked)))
 
 (defn is-reviewable-list?
   "A list is reviewable if:
@@ -274,6 +273,17 @@
         (println (stringify-list-compact auto-marked-list))
         auto-marked-list ;; do not conduct reviews
         ))))
+
+(defn focus-on-list
+  "Changes the status of the marked item closest to
+     the end of the list as done. If no marked items
+     are found, the list is returned as-is."
+  [input-list]
+  (let [can-focus (is-focusable-list? input-list)]
+    (if can-focus
+      (mark-closest-to-end-marked-item-done input-list)
+      input-list
+      )))
 
 (defn -main
   "runs the entire AutoFocus program"
