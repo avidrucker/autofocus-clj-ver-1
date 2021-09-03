@@ -97,6 +97,61 @@
 
 - [x] Tell the user when they haven't answered a question (by entering in nothing)
 
+- [ ] Implement auto-marking after each `focus-on-list`
+
+- [ ] Implement the following e2e test
+    ```clojure
+    ;; attempt to "sort" (do in order) item list by number priority (1,2,3...N)
+    "E2E test to 'sort' a list of number items from lowest to highest (1,2,3...)"
+    ;; the list:
+    ["25","16","104","39","5","86","23","1","105","94","34"]
+    ;; (11 items in total)
+    ;; first review:
+    ["y","n","n","y","n","n","y","n","n","n"]
+    ;; => "[o] [o] [ ] [ ] [o] [ ] [ ] [o] [ ] [ ] [ ]"
+    ;; NOTE: the review algorithm needs to be redone after each
+	;;   focus in order to reassess, 'Are there "higher priority" items after
+	;;   the "last marked item" / "current priority item"?'
+    ;; question: Is it a hard rule that the review algorithm must 
+    ;;           be run after each focus session? 
+    ;; three focuses:
+    ;; => "[o] [x] [ ] [ ] [x] [ ] [ ] [x] [ ] [ ] [ ]"
+    ;; second review:
+    ["n","n","n","y","n","n","n"]
+    ;; => "[o] [x] [ ] [ ] [x] [ ] [o] [x] [ ] [ ] [ ]"
+    ;; Note: "since the remainder of marked items now have no higher priority items
+    ;; in the unmarked part of the list, these marked items can be
+	;; completed in order all in one swoop"
+    ;; question: can the above be determined programmatically?
+    ;; fourth and fifth focuses:
+    ;; TODO: confirm that auto-marking after `focus-on-list` results in this...
+    ;; => "[x] [x] [o] [ ] [x] [ ] [x] [x] [ ] [ ] [ ]"
+    ;; ... and NOT this: "[x] [x] [ ] [ ] [x] [ ] [x] [x] [ ] [ ] [ ]"
+    ;; third review: 
+    ["y","n","n","n","y"]
+    ;; => "[x] [x] [o] [o] [x] [ ] [x] [x] [ ] [ ] [o]"
+    ;; sixth and seventh focuses:
+    ;; => "[x] [x] [o] [x] [x] [ ] [x] [x] [ ] [ ] [x]"
+    ;; fourth review:
+    ["y","n","n"]
+    ;; => "[x] [x] [o] [x] [x] [o] [x] [x] [ ] [ ] [x]"
+    ;; 8th focus:
+    ;; => "[x] [x] [o] [x] [x] [x] [x] [x] [ ] [ ] [x]"
+    ;; 5th review:
+    ['n','y']
+    ;; => "[x] [x] [o] [x] [x] [x] [x] [x] [ ] [o] [x]"
+    ;; again, as before:
+    "since the remainder of marked items now have no higher priority items
+	in the unmarked part of the list, these marked items can be
+	completed in order all in one swoop"
+    ;; two more focuses, with an auto-marking after the final marked item is marked done:
+    ;; => "[x] [x] [x] [x] [x] [x] [x] [x] [o] [x] [x]"
+    ```
+
 ## Won't Do ... Yet
 
 - ~~Update code to enable automatic assignment *and* incrementing of to-do list item IDs~~ [temporary] [invisible]
+
+- Item visibility toggling (hiding / showing)
+
+- Enable the user to say that there is more work to do on a task after ending a focus session
