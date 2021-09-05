@@ -64,10 +64,6 @@
 
 - [x] Implement reviewing of a list by entering a list of yes/no/quit strings ("y", "n", or "q")
 
-- [x] Question: How can reviewing be made interruptible / cancellable while also being functionally pure with separation of concerns? (context: in the past, this seems to require both IO and while loops)
-
-    - [x] Answer: Generate the full list of questions up front when starting a review session. Next, once you are done reviewing, submit the list of inputted yes/no/quit choices to update the to-do list.
-
 - [ ] Enable user to focus on and complete "priority" items (marked items closest to the end of the list)
 
     - [ ] Enable user to review their items in the command line application
@@ -77,8 +73,6 @@
             - [x] Sanitize user input to remove leading and trailing whitespace
             - [x] Enable user to quit the application by using a menu choice
                 - [x] Implement a user menu interface, which offers the user the choice to: enter a new to-do item, review their list, focus on the prioritized item (marked item closest to the end of the list), or quit
-
-- [ ] Question: Can state be removed/reduced using a threading macro? What other effective strategies are there to reduce/remove the usage of `let`? See `scaffold-e2e-test-simple`
 
 - [x] Break code into five namespaces:
 
@@ -105,6 +99,12 @@
 - [x] Tell the user when they haven't answered a question (by entering in nothing)
 
 - [x] Implement auto-marking after each `focus-on-list`
+
+- [ ] Tidy up codebase
+
+    - [ ] Delete entirely or extract & relocate debugging statements
+    - [ ] Extract "comment TODO's" to this document
+    - [ ] Extract questions w/ relevant code snippets to this document
 
 - [ ] Implement the following e2e test
     ```clojure
@@ -161,3 +161,10 @@
 - Item visibility toggling (hiding / showing)
 - Enable the user to say that there is more work to do on a task after ending a focus session
 - Splash screen
+
+## Questions
+
+- [x] How can reviewing be made interruptible / cancellable while also being functionally pure with separation of concerns? (context: in the past, this seems to require both IO and while loops)
+
+  - [x] Answer: Generate the full list of questions up front when starting a review session. Next, once you are done reviewing, submit the list of inputted yes/no/quit choices to update the to-do list.
+- [ ] Can state be removed/reduced using a threading macro? What other effective strategies are there to reduce/remove the usage of `let`? See `scaffold-e2e-test-simple`
