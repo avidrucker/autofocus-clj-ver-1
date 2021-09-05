@@ -107,7 +107,7 @@
   (def quick-three
     ["a" "b" "c"])
 
-  (def long-e2e-list
+  (def long-flow-list
     ["Email" "In-Tray" "Voicemail" "Project X Report" "Tidy Desk"
      "Call Dissatisfied Customer" "Make Dental Appointment"
      "File Invoices" "Discuss Project Y with Bob" "Back Up"])
