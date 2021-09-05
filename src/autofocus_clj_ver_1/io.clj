@@ -59,8 +59,3 @@
 (defn io-demo-1 []
   (user-io (str question-x exit-opt))
   (println goodbye-msg))
-
-(defn -main []
-  (io-demo-1))
-
-;; (-main)
