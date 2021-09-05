@@ -1,6 +1,7 @@
 (ns autofocus-clj-ver-1.examples)
 
-;; TODO: convert these examples to EDN (would this be a good idea and why?)
+;; TODO: convert these examples to EDN
+;; question: Would this be a good idea, why/why not?
 
 (do
   (def example-item
