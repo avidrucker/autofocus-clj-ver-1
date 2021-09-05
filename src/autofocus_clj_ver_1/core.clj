@@ -6,7 +6,7 @@
    [autofocus-clj-ver-1.demos :as demos]
    [clojure.string :as string]))
 
-;; INTERNAL DOMAIN LOGIC
+;; INTERNAL DOMAIN LOGIC / API
 
 (do
   ;; question: What is an effective way to deal with duplicates in a list?
