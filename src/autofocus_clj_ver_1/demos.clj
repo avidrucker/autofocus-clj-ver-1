@@ -1,6 +1,6 @@
 (ns autofocus-clj-ver-1.demos
   (:require
-   [autofocus-clj-ver-1.io :as io]
+   ;; [autofocus-clj-ver-1.io :as io]
    [clojure.string :as str]))
 ;; [clojure.pprint :as p]
 
@@ -70,7 +70,10 @@
 
 ;; TODO: clean up duplicate data
 (def app-state
-  {:options ["splash" ;; press any key to start
+  {:options [;; IDEA: implement a splash screen
+             ;; question: What are the trade-offs of
+             ;; having a splash screen?
+             ;; "splash" ;; press any key to start
              "menu" ;; choose from the following menu
              "adding"
              ;; 1. enter text
@@ -140,7 +143,7 @@
     "Quit application" :quitting
     ))
 
-(menu-text-to-state "Add new to-do")
+;; (menu-text-to-state "Add new to-do")
 
 (def cli-menu
   {:prompt "Choose from the following menu:"
@@ -210,12 +213,12 @@
 
 (defn say-something-about-invalid-input [input-text]
   (if (= input-text "")
-    (println "\n-- You did not enter any 
-              text, please try again.")
+    (println (str "\n-- You did not enter any text," 
+              "\nplease try again."))
     (println
      (format
-      "\n-- The entered text '%s' isn't a 
-       valid choice, please try again."
+      (str "\n-- The entered text '%s' isn't a " 
+       "\nvalid choice, please try again.")
       input-text))))
 
 
@@ -244,22 +247,31 @@
           (first (filter #(= input-text (:id %)) options
                          )))))))
 
+(deliver-cli-menu cli-menu)
+
+;; TODO: update logic to use state names
+;;       instead of menu text options
 (defn run-app
   []
     (println "Welcome to AutoFocus!")
     (loop [current-state {:state :menu}]
-      ;; TODO: update logic to use state names
-        ;;       instead of menu text options
-      (println "Current state is:")
-      (println current-state)
+      ;; DEBUGGING
+      ;; (println "Current state is:")
+      ;; (println current-state)
       (let [new-state (deliver-cli-menu cli-menu)]
         ;; TODO: update logic to use state names
         ;;       instead of menu text options
-        (println "New state will be:")
-        (println (get new-state :text))
+        ;; DEBUGGING
+        ;; (println "New state will be:")
+        ;; (if (keyword? new-state)
+        ;;   (println new-state)
+        ;;   (println (keyword
+        ;;             (menu-text-to-state
+        ;;              (get new-state :text)))))
         (when
          (not= new-state :cancelled)
-          (println "Still running...")
+          ;; DEBUGGING
+          ;; (println "Still running...")
           (recur {:state 
                    (keyword (menu-text-to-state
                     (get new-state :text)))}))))
