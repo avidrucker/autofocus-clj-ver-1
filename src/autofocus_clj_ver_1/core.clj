@@ -2,7 +2,8 @@
 (ns autofocus-clj-ver-1.core
   (:gen-class)
   (:require
-   [autofocus-clj-ver-1.io :as io]
+   ;; [autofocus-clj-ver-1.io :as io]
+   [autofocus-clj-ver-1.demos :as demos]
    [clojure.string :as string]))
 
 ;; INTERNAL DOMAIN LOGIC
@@ -255,6 +256,8 @@
   "runs the entire AutoFocus program"
   []
   ;; MAIN PROGRAM GOES HERE
-  (io/-main))
+  ;; (io/-main)
+  (demos/-main)
+  )
 
 ;; (-main)
