@@ -80,13 +80,15 @@
 
 - [ ] Question: Can state be removed/reduced using a threading macro? What other effective strategies are there to reduce/remove the usage of `let`? See `scaffold-e2e-test-simple`
 
-- [x] Break code into three namespaces:
+- [x] Break code into five namespaces:
 
-    - [x] IO (printing, getting user input)
     - [x] demos
-    - [x] domain logic
-      - [ ] Internal API
-      - [ ] External API
+    - [x] IO (printing, getting user input)
+    - [x] tests
+      - [x] unit
+      - [x] integration and unit
+    - [x] External API domain logic
+    - [x] Internal API domain logic
 
 - [x] Brainstorm clearer naming conventions for to-do item statuses: "unmarked", "dotted", and "completed" [readability]
 
@@ -102,7 +104,7 @@
 
 - [x] Tell the user when they haven't answered a question (by entering in nothing)
 
-- [ ] Implement auto-marking after each `focus-on-list`
+- [x] Implement auto-marking after each `focus-on-list`
 
 - [ ] Implement the following e2e test
     ```clojure
@@ -156,7 +158,6 @@
 ## Won't Do ... Yet
 
 - ~~Update code to enable automatic assignment *and* incrementing of to-do list item IDs~~ [temporary] [invisible]
-
 - Item visibility toggling (hiding / showing)
-
 - Enable the user to say that there is more work to do on a task after ending a focus session
+- Splash screen
