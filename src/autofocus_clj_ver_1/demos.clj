@@ -195,20 +195,18 @@
     (println (str " [" id "]") text))
   (println))
 
-;; (defn run-app-test
-;;   "Create a while-loop-like application that ends
-;;    when the user enters a specific text in the console"
-;;   []
-;;     (loop [running true]
-;;       (println "Type 'done' when you are ready:")
-;;       (let [input-text (read-line)]
-;;         (when (not= input-text "done")
+(defn run-app-test
+  "Create a while-loop-like application that ends
+   when the user enters a specific text in the console"
+  []
+    (loop [running true]
+      (println "Type 'done' when you are ready:")
+      (let [input-text (read-line)]
+        (when (not= input-text "done")
           
-;;             (println "Still running...")
-;;             (recur [true]))))
-;;     (println "All done!"))
-
-;; (run-app-test)
+            (println "Still running...")
+            (recur [true]))))
+    (println "All done!"))
 
 (defn say-something-about-invalid-input [input-text]
   (if (= input-text "")
@@ -267,11 +265,10 @@
                     (get new-state :text)))}))))
     (println "Bye!"))
 
-;; (run-app)
-
 (defn -main []
-;;  (deliver-cli-menu cli-menu)
-  (run-app)
-  )
+  ;; (io/io-demo-1)
+  ;; (deliver-cli-menu cli-menu)
+  ;; (run-app-test)
+  (run-app))
 
 (-main)
