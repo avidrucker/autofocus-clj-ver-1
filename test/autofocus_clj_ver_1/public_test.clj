@@ -25,7 +25,7 @@
   "makes an empty list, adds one item to it,
    and returns the new list of size 1"
   []
-  (af/add-item-to-list
+  (pub/add-item-to-list
    [] ;; blank new empty list
    (af/create-new-item-from-text "a") ;; newly created to-do item
    ))
@@ -39,7 +39,8 @@
          eg/example-list-one-item)
         "works as expected")))
 
-;; TODO: replace this with external facing API once it is built
+;; TODO: replace this with external facing API once it 
+;;       is built
 (defn scaffold-list-from-strings
   "temporary setup function to scaffold e2e tests"
   [input-strings]
@@ -58,6 +59,7 @@
            (pub/review-list
             (scaffold-list-from-strings eg/quick-three) ["y" "y"]))))))
 
+  ;; reference: http://markforster.squarespace.com/blog/2015/5/21/the-final-version-perfected-fvp.html
   ;; TODO: implement this test stub
   ;; first review: ["n", "y", "n", "y", "q"]
   ;; => "[o] [ ] [o] [ ] [o] [ ] [ ] [ ] [ ] [ ]"
