@@ -4,69 +4,14 @@
    [clojure.string :as str]))
 ;; [clojure.pprint :as p]
 
-;; TODO: convert to an integration test
-;; (defn demo1
-;;   "prints out empty list, adds a new item, and then prints again"
-;;   []
-;;   (let [app-state1 {:current-list []}
-;;         app-state2 (assoc app-state1
-;;                           :current-list
-;;                           (add-item-to-list
-;;                            (app-state1 :current-list)
-;;                            example-item))]
-
-;;     (print-demo 1 app-state1 app-state2)))
-
-;; TODO: Convert to an integration test
-;; TODO: implement automark of first markable item
-;; (defn demo2
-;;   "adds three items to list, prints, 
-;;    automarks the first markable item, 
-;;    and then prints again"
-;;   []
-;;   (let [app-state1 [] ;; {:current-list []}
-;;         ;; Build fruit to-do items
-;;         items-to-add (map create-new-item-from-text fruit)
-;;         ;; Note: Mapping here converts vector to list
-;;         ;;       ... which makes vector/sequence only
-;;         ;;       functions not behave (at all or as expected)
-;;         ;; question: Is there a cleaner way to map over
-;;         ;;     a data source (in this case the fruit list)
-;;         ;;     without needing to flatten and vec back to
-;;         ;;     the desired shape? (flat vector of hashmaps)  
-;;         ;; Add fruit to-do items to to-do list
-;;         app-state2 (vec (flatten (map
-;;                                   #(add-item-to-list
-;;                                     app-state1 %)
-;;                                   items-to-add)))
-;;         app-state3 (mark-first-item app-state2)]
-
-;;     ;; TODO: replace printout with separate function
-;;     (binding [p/*print-right-margin* 30]
-;;       (println "start of demo2")
-;;       (println "before (1):")
-;;       (p/pprint (stringify-list app-state1))
-;;       (println "after (2):")
-;;       (p/pprint (stringify-list app-state2))
-;;       (println "final (3):")
-;;       (p/pprint (stringify-list app-state3))
-;;       (println "end of demo2"))))
-
-;; (defn print-demo [number before-state after-state]
+;; (defn print-before-after [number before after]
 ;;   (binding [p/*print-right-margin* 30]
-;;     (println (str "start of demo" number))
+;;     (println (str "start #" number))
 ;;     (println "before:")
-;;     (p/pprint (stringify-list (before-state :current-list)))
+;;     (p/pprint (stringify-list (get before :current-list)))
 ;;     (println "after:")
-;;     (p/pprint (stringify-list (after-state :current-list)))
-;;     (println (str "end of demo" number))))
-
-;; (defn run-all-demos []
-;;   (println "============")
-;;   (demo1)
-;;   (println "------------")
-;;   (demo2)
-;;   (println "============"))
+;;     (p/pprint (stringify-list (get after :current-list)
+;;    (println (str "end #" number))))
 
 ;; TODO: clean up duplicate data
 (def app-state
@@ -202,23 +147,23 @@
   "Create a while-loop-like application that ends
    when the user enters a specific text in the console"
   []
-    (loop [running true]
-      (println "Type 'done' when you are ready:")
-      (let [input-text (read-line)]
-        (when (not= input-text "done")
-          
-            (println "Still running...")
-            (recur [true]))))
-    (println "All done!"))
+  (loop [running true]
+    (println "Type 'done' when you are ready:")
+    (let [input-text (read-line)]
+      (when (not= input-text "done")
+        
+        (println "Still running...")
+        (recur [true]))))
+  (println "All done!"))
 
 (defn say-something-about-invalid-input [input-text]
   (if (= input-text "")
     (println (str "\n-- You did not enter any text," 
-              "\nplease try again."))
+                  "\nplease try again."))
     (println
      (format
       (str "\n-- The entered text '%s' isn't a " 
-       "\nvalid choice, please try again.")
+           "\nvalid choice, please try again.")
       input-text))))
 
 
@@ -247,35 +192,37 @@
           (first (filter #(= input-text (:id %)) options
                          )))))))
 
-(deliver-cli-menu cli-menu)
+;; (deliver-cli-menu cli-menu)
 
 ;; TODO: update logic to use state names
 ;;       instead of menu text options
 (defn run-app
   []
-    (println "Welcome to AutoFocus!")
-    (loop [current-state {:state :menu}]
+  (println "Welcome to AutoFocus!")
+  (loop [current-state {:state :menu}]
+    ;; DEBUGGING
+    (println "Current state is:")
+    (println current-state)
+    ;; TODO: implement conditional logic to load state
+    ;; depending on 'current-state'
+    (let [new-state (deliver-cli-menu cli-menu)]
+      ;; TODO: update logic to use state names
+      ;;       instead of menu text options
       ;; DEBUGGING
-      ;; (println "Current state is:")
-      ;; (println current-state)
-      (let [new-state (deliver-cli-menu cli-menu)]
-        ;; TODO: update logic to use state names
-        ;;       instead of menu text options
+      ;; (println "New state will be:")
+      ;; (if (keyword? new-state)
+      ;;   (println new-state)
+      ;;   (println (keyword
+      ;;             (menu-text-to-state
+      ;;              (get new-state :text)))))
+      (when
+          (not= new-state :cancelled)
         ;; DEBUGGING
-        ;; (println "New state will be:")
-        ;; (if (keyword? new-state)
-        ;;   (println new-state)
-        ;;   (println (keyword
-        ;;             (menu-text-to-state
-        ;;              (get new-state :text)))))
-        (when
-         (not= new-state :cancelled)
-          ;; DEBUGGING
-          ;; (println "Still running...")
-          (recur {:state 
-                   (keyword (menu-text-to-state
-                    (get new-state :text)))}))))
-    (println "Bye!"))
+        ;; (println "Still running...")
+        (recur {:state 
+                (keyword (menu-text-to-state
+                          (get new-state :text)))}))))
+  (println "Bye!"))
 
 (defn -main []
   ;; (io/io-demo-1)
