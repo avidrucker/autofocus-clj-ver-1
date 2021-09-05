@@ -128,6 +128,9 @@
     [input-item input-status]
     (assoc input-item :status input-status))
 
+  ;; Note: Implementation of 'lastDone' data may affect
+  ;; where auto-marking can or cannot occur.
+  ;; TODO: investigate whether lastDone trade-offs, need
   (defn mark-first-markable
     "Marks the first markable item of a list.
    If no markable items are found, the list is returned as-is.
