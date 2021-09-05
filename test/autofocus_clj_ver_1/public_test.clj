@@ -6,6 +6,7 @@
 
 ;; EXTERNAL API
 
+;; these tests will only test one function
 (deftest unit-tests
   (testing "Focusing on a list"
     (is (= eg/example-list-three-items-first-marked-last-completed
@@ -30,19 +31,10 @@
    (af/create-new-item-from-text "a") ;; newly created to-do item
    ))
 
-(deftest integration-tests
-  ;; question: How are integration/E2E tests set up in
-  ;;  an effective manner in Clojure?
-  (testing "adding items to a list"
-    (is (=
-         (scaffold-integration-test-1)
-         eg/example-list-one-item)
-        "works as expected")))
-
 ;; TODO: replace this with external facing API once it 
 ;;       is built
 (defn scaffold-list-from-strings
-  "temporary setup function to scaffold e2e tests"
+  "temporary setup function to scaffold integration tests"
   [input-strings]
   (let [item-list
         (map af/create-new-item-from-text input-strings)]
@@ -50,16 +42,30 @@
                         (map #(af/add-item-to-list [] %)
                              item-list))))))
 
-(deftest end-to-end-tests
-  (testing "first simple e2e test"
+;; these tests will test a combination of public and private APIs
+(deftest integration-tests
+  ;; question: How are integration/E2E tests set up in
+  ;;  an effective manner in Clojure?
+  (testing "adding items to a list"
+    (is (=
+         (scaffold-integration-test-1)
+         eg/example-list-one-item)
+        "works as expected"))
+
+  (testing "add items, review items, and focus on an item"
     (is (=
          "[o] [o] [x]"
          (af/stringify-list-compact
           (pub/focus-on-list
            (pub/review-list
-            (scaffold-list-from-strings eg/quick-three) ["y" "y"]))))))
+            (scaffold-list-from-strings 
+             eg/quick-three) ["y" "y"]))))
+        "works as expected")
+    )
 
+  (testing "long flow integration test")
   ;; reference: http://markforster.squarespace.com/blog/2015/5/21/the-final-version-perfected-fvp.html
+  
   ;; TODO: implement this test stub
   ;; first review: ["n", "y", "n", "y", "q"]
   ;; => "[o] [ ] [o] [ ] [o] [ ] [ ] [ ] [ ] [ ]"
@@ -71,34 +77,41 @@
   ;; => "[o] [ ] [x] [ ] [x] [ ] [o] [ ] [o] [x]"
   ;; fourth and fifth focuses:
   ;; => "[o] [ ] [x] [ ] [x] [ ] [x] [ ] [x] [x]"
-  (testing "long e2e test"
+  (testing "long flow integration test"
     (is (= "[ ] [ ] [ ] [ ] [ ] [ ] [ ] [ ] [ ] [ ]"
-           (af/stringify-list-compact (scaffold-list-from-strings eg/long-e2e-list)))))
+           (af/stringify-list-compact 
+            (scaffold-list-from-strings eg/long-flow-list)))))
   ;; FIRST REVIEW
   ;; "Now ask yourself 'What do I want to do more than Email?'
-	;; You decide you want to do Voicemail more than Email.
-	;; Put a dot in front of it.
-	;; Now ask yourself 'What do I want to do more than Voicemail?'
-	;; You decide you want to tidy your desk."
-	;; review items, saying yes only for 3rd & 5th items
+  ;; You decide you want to do Voicemail more than Email.
+  ;; Put a dot in front of it.
+  ;; Now ask yourself 'What do I want to do more than Voicemail?'
+  ;; You decide you want to tidy your desk."
+  ;; review items, saying yes only for 3rd & 5th items
   ;; FIRST FOCUS
   ;; Do the "Tidy Desk" task (last marked item / CMWTD)
   ;; SECOND REVIEW
   ;; "Now start again from Tidy Desk (i.e. the last task you did).
-	;; and ask yourself 'What do I want to do more than Voicemail?'
-	;; The only task you want to do more than Voicemail is Back Up."
-	;; review items, saying yes only to last item (in this review it will be the 5th)
+  ;; and ask yourself 'What do I want to do more than Voicemail?'
+  ;; The only task you want to do more than Voicemail is Back Up."
+  ;; review items, saying yes only to last item (in this review it will be the 5th)
   ;; SECOND FOCUS
   ;; "Do it." (Back Up)
   ;; THIRD FOCUS
   ;; "There are no further tasks beyond Back Up, so there is no
-	;; need to check whether you want to do any tasks more than
-	;; you want to do Voicemail. You just do it."
+  ;; need to check whether you want to do any tasks more than
+  ;; you want to do Voicemail. You just do it."
   ;; THIRD REVIEW
   ;; "You already know that you want to do Email more than In-tray, so you start
-	;; scanning from the first task after the task you have just done (Voicemail)."
-	;; "You decide you want to do Make Dental Appointment"
+  ;; scanning from the first task after the task you have just done (Voicemail)."
+  ;; "You decide you want to do Make Dental Appointment"
   ;; FOURTH AND FIFTH FOCUSES:
   ;; As this is the last task on the list you do it immediately,
-	;; and then do Make Dental Appointment immediately too.
+  ;; and then do Make Dental Appointment immediately too.
+  )
+
+;; note: e2e tests, in order to be e2e tests, must touch either
+;;       command line IO or web interface IO
+(deftest end-to-end-tests
+  ;; code goes here
   )
