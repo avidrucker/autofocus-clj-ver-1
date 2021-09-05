@@ -72,6 +72,8 @@
 
     - [ ] Enable user to review their items in the command line application
         - [ ] Enable user to input text for a new to-do item manually in the console [IO]
+            - [ ] Prevent user from entering invalid text to-do's (only whitespace or empty string)
+            - [ ] Sanitize user input to remove leading and trailing whitespace
             - [ ] Enable user to quit the application by using a menu choice
                 - [ ] Implement a user menu interface, which offers the user the choice to: enter a new to-do item, review their list, focus on the prioritized item (marked item closest to the end of the list), or quit
 
