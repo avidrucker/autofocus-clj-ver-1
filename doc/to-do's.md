@@ -73,9 +73,10 @@
     - [ ] Enable user to review their items in the command line application
         - [ ] Enable user to input text for a new to-do item manually in the console [IO]
             - [ ] Prevent user from entering invalid text to-do's (only whitespace or empty string)
-            - [ ] Sanitize user input to remove leading and trailing whitespace
-            - [ ] Enable user to quit the application by using a menu choice
-                - [ ] Implement a user menu interface, which offers the user the choice to: enter a new to-do item, review their list, focus on the prioritized item (marked item closest to the end of the list), or quit
+            - [ ] Enable transition between app "sub-states" (eg. `menu` to `adding`, `adding` to `menu`, etc.)
+            - [x] Sanitize user input to remove leading and trailing whitespace
+            - [x] Enable user to quit the application by using a menu choice
+                - [x] Implement a user menu interface, which offers the user the choice to: enter a new to-do item, review their list, focus on the prioritized item (marked item closest to the end of the list), or quit
 
 - [ ] Question: Can state be removed/reduced using a threading macro? What other effective strategies are there to reduce/remove the usage of `let`? See `scaffold-e2e-test-simple`
 
@@ -84,6 +85,8 @@
     - [x] IO (printing, getting user input)
     - [x] demos
     - [x] domain logic
+      - [ ] Internal API
+      - [ ] External API
 
 - [x] Brainstorm clearer naming conventions for to-do item statuses: "unmarked", "dotted", and "completed" [readability]
 
