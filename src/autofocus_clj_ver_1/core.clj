@@ -19,9 +19,6 @@
    ;; :is-hidden false
      })
 
-  (defn add-item-to-list [input-list new-item]
-    (conj input-list new-item))
-
   ;; question: Is this best replaced by a hashmap?
   (defn status-to-mark [status]
     (cond

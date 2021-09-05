@@ -3,6 +3,9 @@
 
 ;; EXTERNAL DOMAIN LOGIC / "PUBLIC FACING / EXPOSED API"
 
+(defn add-item-to-list [input-list new-item]
+  (conj input-list new-item))
+
 (defn review-list
   "takes the to-do items list to:
    1. auto-marks the first markable index if it can
@@ -29,13 +32,21 @@
         auto-marked-list ;; do not conduct reviews
         ))))
 
+;; TODO: Test to confirm auto-marking after focusing
+;;       works as desired.
 (defn focus-on-list
   "Changes the status of the marked item closest to
-     the end of the list as done. If no marked items
-     are found, the list is returned as-is."
+   the end of the list as done. If, after focusing,
+   no marked items are left and there are one or more
+   clean items remaining, the clean item closest to
+   the beginning of the list is auto-marked*. If no
+   marked items are found, the list is returned as-is.
+   *Note: Implementation of 'lastDone' data may affect
+   where auto-marking can or cannot occur."
   [input-list]
   (let [can-focus (af/is-focusable-list? input-list)]
     (if can-focus
-      (af/mark-closest-to-end-marked-item-done input-list)
+      (af/mark-first-markable
+       (af/mark-closest-to-end-marked-item-done input-list))
       input-list)))
 
