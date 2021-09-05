@@ -1,4 +1,6 @@
-(ns autofocus-clj-ver-1.io)
+(ns autofocus-clj-ver-1.io
+  (:require
+   [clojure.string :as str]))
 ;; [clojure.pprint :as p]
 
 ;; question: is this effectful, or side-effecting?
@@ -54,8 +56,11 @@
       (reply input)
       (recur prompt-msg))))
 
-(defn -main []
+(defn io-demo-1 []
   (user-io (str question-x exit-opt))
   (println goodbye-msg))
+
+(defn -main []
+  (io-demo-1))
 
 ;; (-main)
