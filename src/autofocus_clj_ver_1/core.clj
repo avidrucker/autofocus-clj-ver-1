@@ -257,7 +257,7 @@
   []
   ;; MAIN PROGRAM GOES HERE
   ;; (io/-main)
-  (demos/-main)
+  ;; (demos/-main)
   )
 
 ;; (-main)
