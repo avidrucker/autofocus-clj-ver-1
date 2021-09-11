@@ -39,7 +39,7 @@
   (let [item-list
         (map af/create-new-item-from-text input-strings)]
     (vec (flatten (into []
-                        (map #(af/add-item-to-list [] %)
+                        (map #(pub/add-item-to-list [] %)
                              item-list))))))
 
 ;; these tests will test a combination of public and private APIs
@@ -79,8 +79,9 @@
   ;; => "[o] [ ] [x] [ ] [x] [ ] [x] [ ] [x] [x]"
   (testing "long flow integration test"
     (is (= "[ ] [ ] [ ] [ ] [ ] [ ] [ ] [ ] [ ] [ ]"
-           (af/stringify-list-compact 
-            (scaffold-list-from-strings eg/long-flow-list)))))
+           (->> eg/long-flow-list
+                scaffold-list-from-strings
+                af/stringify-list-compact))))
   ;; FIRST REVIEW
   ;; "Now ask yourself 'What do I want to do more than Email?'
   ;; You decide you want to do Voicemail more than Email.
