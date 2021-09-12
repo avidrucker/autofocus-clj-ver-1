@@ -58,14 +58,12 @@
          (af/stringify-list-compact
           (pub/focus-on-list
            (pub/review-list
-            (scaffold-list-from-strings 
+            (scaffold-list-from-strings
              eg/quick-three) ["y" "y"]))))
-        "works as expected")
-    )
+        "works as expected"))
 
-  (testing "long flow integration test")
   ;; reference: http://markforster.squarespace.com/blog/2015/5/21/the-final-version-perfected-fvp.html
-  
+
   ;; TODO: implement this test stub
   ;; first review: ["n", "y", "n", "y", "q"]
   ;; => "[o] [ ] [o] [ ] [o] [ ] [ ] [ ] [ ] [ ]"
@@ -77,11 +75,33 @@
   ;; => "[o] [ ] [x] [ ] [x] [ ] [o] [ ] [o] [x]"
   ;; fourth and fifth focuses:
   ;; => "[o] [ ] [x] [ ] [x] [ ] [x] [ ] [x] [x]"
+
+  ;; ref: https://stackoverflow.com/questions/7658981/how-to-reload-a-clojure-file-in-repl
+  (use 'autofocus-clj-ver-1.public-test :reload)
+
   (testing "long flow integration test"
     (is (= "[ ] [ ] [ ] [ ] [ ] [ ] [ ] [ ] [ ] [ ]"
            (->> eg/long-flow-list
                 scaffold-list-from-strings
-                af/stringify-list-compact))))
+                af/stringify-list-compact)))
+
+    (is (= "[o] [ ] [o] [ ] [o] [ ] [ ] [ ] [ ] [ ]"
+           (->> eg/long-flow-list
+                scaffold-list-from-strings
+                (#(pub/review-list % ["n" "y" "n" "y" "q"]))
+                af/stringify-list-compact)))
+    
+    ;; this test requires 'lastDone' to function as desired
+    (is (= "[o] [ ] [o] [ ] [x] [ ] [ ] [ ] [ ] [o]"
+           (->> eg/long-flow-list
+                scaffold-list-from-strings
+                (#(pub/review-list % ["n" "y" "n" "y" "q"]))
+                pub/focus-on-list
+                af/stringify-list-compact)))
+    
+    ;; "[o] [ ] [o] [ ] [x] [ ] [ ] [ ] [ ] [o]"
+    ;; (#(pub/review-list % ["n", "n", "n", "n", "y"]))
+    )
   ;; FIRST REVIEW
   ;; "Now ask yourself 'What do I want to do more than Email?'
   ;; You decide you want to do Voicemail more than Email.
