@@ -97,8 +97,11 @@
      (keep-indexed-status input-list :clean)))
 
   (defn index-of-last-marked
-    "finds the marked item closest to the end 
-     of the list and returns its index"
+    "Finds the marked item closest to the end 
+     of the list and returns its index.
+     This item is the 'priority' item that
+     will be queued up first when entering
+     'focus mode'."
     [input-list]
     (last
      (keep-indexed-status input-list :marked)))
@@ -117,7 +120,7 @@
   ;;  "mark-item", "complete-item", and "new-item-status"
   (defn mod-item-status-at-index-in-list
     "returns new list with the status of an item
-   updated at the given index in list"
+     updated at the given index in list"
     [in-list in-index in-status]
     (assoc-in in-list [in-index :status] in-status))
 
