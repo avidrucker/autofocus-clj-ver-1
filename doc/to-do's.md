@@ -105,12 +105,16 @@
   - [ ] Extract "comment TODO's" to this document
   - [ ] Extract questions w/ relevant code snippets to this document
 
+- [x] Test to confirm auto-marking after focusing works as desired. (see "long flow integration test" which confirms)
+
+- [ ] Implement `last-done` to enable the app state to remember what the most recently completed item index was 
+
 - [ ] Implement "long flow integration test" (formerly called "long-e2e-test")
 
   - [x] 1. Create a blank list
   - [x] 2. Add the items to the list
-  - [ ] 3. Do the first review
-  - [ ] 4. ...
+  - [x] 3. Do the first review
+  - [ ] 4. Do the second review which requires `last-done`
 
 ---
 
@@ -157,6 +161,11 @@
                             #(add-item-to-list app-state1 %)
                              items-to-add)))
   ```
+  
+- [x] Does `last-done` require its own state memory to maintain? Could it perhaps be simpler and algorithmically calculatable (eg. the completed item closest to the beginning of the list)? **TLDR Answer: Yes, it appears to require its own memory to maintain.**
+
+  - [x] Investigate on paper w/ all 3 item list permutations
+  - [x] Results: As far as I can tell, one cannot determine which was the last done item simply by looking at the list itself
 
 ---
 
