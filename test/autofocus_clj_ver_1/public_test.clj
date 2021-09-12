@@ -76,6 +76,8 @@
   ;; fourth and fifth focuses:
   ;; => "[o] [ ] [x] [ ] [x] [ ] [x] [ ] [x] [x]"
 
+  ;; TIL: "reeval entire file clojure hot reload"
+  ;;      "How to reload a clojure file in REPL"
   ;; ref: https://stackoverflow.com/questions/7658981/how-to-reload-a-clojure-file-in-repl
   (use 'autofocus-clj-ver-1.public-test :reload)
 
@@ -88,20 +90,27 @@
     (is (= "[o] [ ] [o] [ ] [o] [ ] [ ] [ ] [ ] [ ]"
            (->> eg/long-flow-list
                 scaffold-list-from-strings
+                ;; TIL: "clojure anonymous function in thread last"
+                ;;      "threading macro with anonymous functions"
+                ;; https://stackoverflow.com/questions/10740265/threading-macro-with-anonymous-functions
                 (#(pub/review-list % ["n" "y" "n" "y" "q"]))
                 af/stringify-list-compact)))
-    
-    ;; this test requires 'lastDone' to function as desired
-    (is (= "[o] [ ] [o] [ ] [x] [ ] [ ] [ ] [ ] [o]"
+
+    (is (= "[o] [ ] [o] [ ] [x] [ ] [ ] [ ] [ ] [ ]"
            (->> eg/long-flow-list
                 scaffold-list-from-strings
                 (#(pub/review-list % ["n" "y" "n" "y" "q"]))
                 pub/focus-on-list
                 af/stringify-list-compact)))
-    
-    ;; "[o] [ ] [o] [ ] [x] [ ] [ ] [ ] [ ] [o]"
-    ;; (#(pub/review-list % ["n", "n", "n", "n", "y"]))
-    )
+
+    ;; this test requires 'last-done' to function as desired
+    (is (= "[o] [ ] [o] [ ] [x] [ ] [ ] [ ] [ ] [o]"
+           (->> eg/long-flow-list
+                scaffold-list-from-strings
+                (#(pub/review-list % ["n" "y" "n" "y" "q"]))
+                pub/focus-on-list
+                (#(pub/review-list % ["n", "n", "n", "n", "y"]))
+                af/stringify-list-compact))))
   ;; FIRST REVIEW
   ;; "Now ask yourself 'What do I want to do more than Email?'
   ;; You decide you want to do Voicemail more than Email.

@@ -85,9 +85,9 @@
      input-list))
 
   ;; note: see design decision 2
-  ;; note: if/when "lastDone" is implemented, new logic may need 
+  ;; note: if/when "last-done" is implemented, new logic may need 
   ;;       to be added (first markable starts looking after 
-  ;;       "lastDone", instead of index 0)
+  ;;       "last-done", instead of index 0)
   ;; TODO: create modular function to replace "index-of-first" and "index-of-last"
   (defn index-of-first-markable
     "finds the first clean item in the list 
@@ -128,9 +128,9 @@
     [input-item input-status]
     (assoc input-item :status input-status))
 
-  ;; Note: Implementation of 'lastDone' data may affect
+  ;; Note: Implementation of 'last-done' data may affect
   ;; where auto-marking can or cannot occur.
-  ;; TODO: investigate whether lastDone trade-offs, need
+  ;; TODO: investigate whether last-done trade-offs, need
   (defn mark-first-markable
     "Marks the first markable item of a list.
    If no markable items are found, the list is returned as-is.

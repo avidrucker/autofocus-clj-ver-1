@@ -32,8 +32,7 @@
         auto-marked-list ;; do not conduct reviews
         ))))
 
-;; TODO: Test to confirm auto-marking after focusing
-;;       works as desired.
+;; TODO: demote this function to the "af-list" namespace
 (defn focus-on-list
   "Changes the status of the marked item closest to
    the end of the list as done. If, after focusing,
@@ -41,7 +40,7 @@
    clean items remaining, the clean item closest to
    the beginning of the list is auto-marked*. If no
    marked items are found, the list is returned as-is.
-   *Note: Implementation of 'lastDone' data may affect
+   *Note: Implementation of 'last-done' data may affect
    where auto-marking can or cannot occur."
   [input-list]
   (let [can-focus (af/is-focusable-list? input-list)]
@@ -49,4 +48,6 @@
       (af/mark-first-markable
        (af/mark-closest-to-end-marked-item-done input-list))
       input-list)))
+
+
 
