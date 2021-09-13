@@ -1,7 +1,8 @@
 (ns autofocus-clj-ver-1.demos
   (:require
    ;; [autofocus-clj-ver-1.io :as io]
-   [clojure.string :as str]))
+   ;; [clojure.string :as str]
+   ))
 ;; [clojure.pprint :as p]
 
 ;; (defn print-before-after [number before after]
