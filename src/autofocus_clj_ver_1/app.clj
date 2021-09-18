@@ -5,6 +5,38 @@
    [autofocus-clj-ver-1.list :as list]
    [autofocus-clj-ver-1.util :as util]))
 
+(def initial-app-state
+  {:list []
+   :last-done nil})
+
+;; TODO: implement FSM as data
+;; reference: https://www.cognitect.com/blog/2017/5/22/restate-your-ui-using-state-machines-to-simplify-user-interface-development
+;; question: What needs to happen in order to allow "back button" functionality in the command line app?
+;;           For example: State history stack, state history buffer (remembering X states & changes)
+;;           sub-question: What about limited back/interrupt functionality simply for a few states?
+;;                         For example:
+;;                         - Backing out of creating a to-do list item
+;;                         - Backing out of a review session
+;;                         - Backing out of a focus session
+(def fsm {'Start          {:init             'Menu}
+          'Menu           {:adding           'Add
+                           :reviewing        'Review
+                           :focusing         'Focus
+                           :about            'About
+                           :help             'Help
+                           :quitting         'Quit}
+          'Add            {:done             'Menu}
+          'Review         {:done             'Menu}
+          'Focus          {:no-work-left     'Menu
+                           :work-remains     'Dup}
+          'Dup            {:done             'Menu} ;; question: Does priority item duplication need its own state? What are the trade-offs?
+          'About          {:done             'Menu}
+          'Help           {:done             'Menu}
+          'Quit           {:yes-quit         'Exit ;; question: Does quit confirmation need its own state? What are the trade-offs?
+                           :no-quit          'Menu}
+})
+
+
 ;; TODO: implement this stub
 (defn focus-on-app
   "1. Takes in the entire app state containing:
