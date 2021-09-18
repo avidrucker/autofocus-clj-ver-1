@@ -107,7 +107,7 @@
 
 - [x] Test to confirm auto-marking after focusing works as desired. (see "long flow integration test" which confirms)
 
-- [ ] Implement `last-done` to enable the app state to remember what the most recently completed item index was 
+- [ ] **Implement `last-done` to enable the app state to remember what the most recently completed item index was** 
 
 - [ ] Implement "long flow integration test" (formerly called "long-e2e-test")
 
