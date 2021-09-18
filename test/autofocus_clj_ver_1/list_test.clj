@@ -275,14 +275,13 @@
 
     ;; TODO: implement last-done to remove blocker to implementing this test
     ;; this test requires 'last-done' to function as desired
-    ;; (is (= "[o] [ ] [o] [ ] [x] [ ] [ ] [ ] [ ] [o]"
-    ;;        (->> eg/long-flow-list
-    ;;             scaffold-list-from-strings
-    ;;             (#(list/review-list % ["n" "y" "n" "y" "q"]))
-    ;;             list/focus-on-list
-    ;;             (#(list/review-list % ["n", "n", "n", "n", "y"]))
-    ;;             list/stringify-list-compact)))
-    
+    (is (= "[o] [ ] [o] [ ] [x] [ ] [ ] [ ] [ ] [o]"
+           (->> eg/long-flow-list
+                scaffold-list-from-strings
+                (#(list/review-list % ["n" "y" "n" "y" "q"]))
+                list/focus-on-list
+                (#(list/review-list % ["n", "n", "n", "n", "y"]))
+                list/stringify-list-compact)))
     )
   
   ;; FIRST REVIEW
