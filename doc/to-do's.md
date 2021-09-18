@@ -1,5 +1,10 @@
 # To-Do's
 
+## Roadmap
+
+- command line app
+- web app w/ re-frame
+
 ---
 
 ## Initial Rough Draft
@@ -107,7 +112,10 @@
 
 - [x] Test to confirm auto-marking after focusing works as desired. (see "long flow integration test" which confirms)
 
-- [ ] **Implement `last-done` to enable the app state to remember what the most recently completed item index was** 
+- [ ] **Implement `last-done` to enable the app state to remember what the most recently completed item index was**
+
+  - [ ] Implement app-t (atom with an integer in it) to keep a "current index" of internal application time
+  - [ ] Add t-completed, t-marked, t-created w/o changing/removing the `clean/marked/done` statuses flag (add schema via "accretion" to gracefully transition the to-do list state architecture)
 
 - [ ] Implement "long flow integration test" (formerly called "long-e2e-test")
 
@@ -118,10 +126,14 @@
 
 ---
 
+## Investigate
+
+- `read` for ~~evaluating~~ accepting / taking in Clojure code from the console, for example, keywords
+
 ## Won't Do ... Yet
 
 - ~~Update code to enable automatic assignment *and* incrementing of to-do list item IDs~~ [temporary] [invisible]
-- Item visibility toggling (hiding / showing)
+- Item visibility toggling (hiding / showing) [not critical]
 - Enable the user to say that there is more work to do on a task after ending a focus session
 - Splash screen
 - Persisting items outside of the application state (saving, loading, exporting, importing, databases, etc.)
@@ -132,12 +144,15 @@
   - Voice control (no hands, keyboard, or mouse)
   - "Zen mode" (only see one thing at a time)
   - Mouse only mode
-- Integrations with other services, such as email, calendar, virtual assistant
+- Integrations with other services, such as email, calendar, virtual assistant, emacs
 - Workplace and/or teamwork integrations
 - Packaging as a plug-in for a web browser
 - Auto-date-and-time stamping of lists
 - Auto-date-and-time-stamping of items
-- Ability to re-wind or undo what you have done in the application ("time-travel")
+- Ability to re-wind or undo what you have done in the application ("time-travel") [advised to try by DF]
+  - undo stack
+  - last-app-state
+  - note: trivial to implement in re-frame
 
 ---
 
@@ -166,6 +181,8 @@
 
   - [x] Investigate on paper w/ all 3 item list permutations
   - [x] Results: As far as I can tell, one cannot determine which was the last done item simply by looking at the list itself
+  
+- [ ] What does my data look like?
 
 ---
 
@@ -260,5 +277,6 @@ completed in order all in one swoop"
 
 ## Learning Emacs
 
-- **C-x C-e** runs the command `cider-eval-last-expression`
-- **C-c C-k** 	Compile current buffer. 
+- **`C-x C-e`** runs the command `cider-eval-last-expression`
+- **`C-c C-k`** 	Compile current buffer. 
+- **`M-x cider-repl-set-ns`** Switch to current CLJ file's namespace
