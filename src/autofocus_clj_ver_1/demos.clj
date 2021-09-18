@@ -1,6 +1,6 @@
 (ns autofocus-clj-ver-1.demos
   (:require
-   ;; [autofocus-clj-ver-1.io :as io]
+   [autofocus-clj-ver-1.cli :as cli]
    ;; [clojure.string :as str]
    ))
 ;; [clojure.pprint :as p]
@@ -33,35 +33,6 @@
 
 ;; (menu-text-to-state "Add new to-do")
 
-(def quit-confirmation
-  {:prompt "Are you sure you want to close the program now?"
-   :options [{:id "y"
-              :text "Yes"}
-             {:id "n"
-              :text "No"}]})
-
-;; TODO: implement stub
-;; (defn deliver-yes-no-question [prompt]
-;;   (let [options (parse-options [{:id "y"
-;;                  :text "Yes"}
-;;                 {:id "n"
-;;                  :text "No"}])
-;;         valid-options (set (map :id options))]
-;;     ;; code goes here
-;;        ))
-
-;; TODO: implement stub
-;; (defn deliver-yes-no-quit-question [prompt]
-;;   (let [options (parse-options [{:id "y"
-;;                   :text "Yes"}
-;;                  {:id "n"
-;;                   :text "No"}
-;;                  {:id "q"
-;;                   :text "Quit"}])
-;;         valid-options (set (map :id options))]
-;;     ;; code goes here
-;;     ))
-
 (defn run-app-test
   "Create a while-loop-like application that ends
    when the user enters a specific text in the console"
@@ -81,7 +52,7 @@
   ;; (io/io-demo-1)
   ;; (deliver-cli-menu cli-menu)
   ;; (run-app-test)
-  ;; (run-app)
+  (cli/run-cli-app)
   )
 
-;; (-main)
+(-main)
