@@ -52,7 +52,7 @@
   ;; (io/io-demo-1)
   ;; (deliver-cli-menu cli-menu)
   ;; (run-app-test)
-  (cli/run-cli-app)
-  )
+  (cli/run-cli-app))
 
-(-main)
+;; (-main)
+
