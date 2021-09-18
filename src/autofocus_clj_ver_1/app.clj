@@ -4,9 +4,17 @@
    ;; TODO: remove this TEMP reference to util namespace
    [autofocus-clj-ver-1.list :as list]))
 
+;; (def app-t (atom 0))
+
+;; TODO: implement core that use initial-app-state to start the application
 (def initial-app-state
-  {:list []
-   :last-done nil})
+  {
+   ;; UI state
+   :current-state :initial
+   ;; domain knowledge
+   :list []
+   :t 0 ;; sequential time of the list
+   })
 
 ;; TODO: implement FSM as data
 ;; reference: https://www.cognitect.com/blog/2017/5/22/restate-your-ui-using-state-machines-to-simplify-user-interface-development
@@ -17,7 +25,24 @@
 ;;                         - Backing out of creating a to-do list item
 ;;                         - Backing out of a review session
 ;;                         - Backing out of a focus session
-(def fsm {'Start          {:init             'Menu}
+;;
+;; things to try: protocols & reified Java objects
+;; 
+;;                           persistant data storage
+;;                                  ^^^^^
+;;                      adaptor at the persistence layer
+;;              (This is responsible for saving & loading, EDN and/or CSV)
+;;              note: all you need for EDN is (split) and (slurp)
+;;              note: Wrapping in a protocol can allow for extending later
+;;              (this can also handle text output to a format that
+;;                 is easily printed out for human consumption)
+;;                       _____________________________
+;;                       |       pure functions       |
+;; |    input / output   | menu/adding/reviewing/etc. | 
+;; human > program > cli >    application state (which part of the program I am in)       
+;;                              to-do list state (items in the list)
+;; program usage intention state machine (indicates what the UI can do at any time)
+(def fsm {'Start          {:initial          'Menu}
           'Menu           {:adding           'Add
                            :reviewing        'Review
                            :focusing         'Focus
