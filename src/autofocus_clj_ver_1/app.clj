@@ -2,8 +2,7 @@
   (:require
    ;; [autofocus-clj-ver-1.io :as io]
    ;; TODO: remove this TEMP reference to util namespace
-   [autofocus-clj-ver-1.list :as list]
-   [autofocus-clj-ver-1.util :as util]))
+   [autofocus-clj-ver-1.list :as list]))
 
 (def initial-app-state
   {:list []
@@ -47,7 +46,7 @@
    - If no: It returns the app-state as-is
    Note: last-done is 'the most recently completed item index'"
   [{:keys [list last-done]} input-app]
-  (println "The list is: " (util/stringify-list-compact list))
+  (println "The list is: " (list/stringify-list-compact list))
   (println "Last done is: " last-done)
   (println "The type of 'input-app' is " (type input-app))
   (println "Focusable: " (list/is-focusable-list? list)))
