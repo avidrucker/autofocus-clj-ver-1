@@ -95,28 +95,23 @@
   (assoc-in in-list [in-index :status] in-status))
 
 ;; Note: Implementation of 'last-done' data may affect
-  ;; where auto-marking can or cannot occur.
-  ;; TODO: investigate whether last-done trade-offs, need
-  (defn mark-first-markable
+;; where auto-marking can or cannot occur.
+;; TODO: investigate whether last-done trade-offs, need
+(defn mark-first-markable
     "Marks the first markable item of a list.
    If no markable items are found, the list is returned as-is.
    I am calling this internally 'auto-marking'."
     [input-list]
     (if (is-auto-markable-list? input-list)
     ;; note: lets tend to be constant time to create & store (variable allocation)
-      ;; TODO: remove do call
-      (do
         ;; (println "is auto-markable list...")
-        (let [index (index-of-first-markable input-list)]
-          (mod-item-status-at-index-in-list input-list index :marked)))
-      ;; TODO: remove do call
-      (do
+      (let [index (index-of-first-markable input-list)]
+        (mod-item-status-at-index-in-list input-list index :marked))
         ;; (println "is NOT auto-markable list...")
-        input-list ;; if list ISN'T auto-markable
-        )
+      input-list ;; if list ISN'T auto-markable
       ))
 
-  (defn mark-closest-to-end-marked-item-done
+(defn mark-closest-to-end-marked-item-done
     "Changes the status of the marked item closest to
      the end of the list as done."
     [input-list]
@@ -232,16 +227,14 @@
         auto-marked-list (mark-first-markable input-list)]
     ;; step 2: assess whether list is reviewable
     (if (is-reviewable-list? auto-marked-list)
-      (do
-        ;; TODO: remove println debugging
+
         ;; (println "reviewing...")
-        (apply-answers auto-marked-list answers)) ;; conduct reviews
-      (do
-        ;; TODO: remove println debugging
+        (apply-answers auto-marked-list answers) ;; conduct reviews
+
         ;; (println "not revewing...")
-        (println (stringify-list-compact auto-marked-list))
+        ;; (println (stringify-list-compact auto-marked-list))
         auto-marked-list ;; do not conduct reviews
-        ))))
+        )))
 
 ;; TODO: demote this function to the "list" namespace
 (defn focus-on-list
