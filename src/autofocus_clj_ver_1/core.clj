@@ -2,7 +2,7 @@
 (ns autofocus-clj-ver-1.core
   (:gen-class)
   (:require
-   ;; [autofocus-clj-ver-1.io :as io]
+   [autofocus-clj-ver-1.cli :as cli]
 ))
 
 (defn -main
@@ -11,6 +11,7 @@
   ;; MAIN PROGRAM GOES HERE
   ;; (io/-main)
   ;; (demos/-main)
+  (cli/run-cli-app)
   )
 
 ;; (-main)
