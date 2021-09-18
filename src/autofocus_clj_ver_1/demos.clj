@@ -37,13 +37,13 @@
   "Create a while-loop-like application that ends
    when the user enters a specific text in the console"
   []
-  (loop [running true]
+  (loop [] ;; original: (loop [running true]
     (println "Type 'done' when you are ready:")
     (let [input-text (read-line)]
       (when (not= input-text "done")
         
         (println "Still running...")
-        (recur [true]))))
+        (recur)))) ;; original: (recur [true]))))
   (println "All done!"))
 
 ;; (deliver-cli-menu cli-menu)
