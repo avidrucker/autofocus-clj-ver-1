@@ -16,7 +16,7 @@
     (= status :clean) "[ ]"
     (= status :marked) "[o]"
     (= status :done) "[x]"
-    :default "?"))
+    :else "?"))
 
 (defn render-item-with-mark [item]
   (str " - " (status-to-mark (get item :status)) " " (get item :text)))
