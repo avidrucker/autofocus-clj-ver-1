@@ -1,6 +1,5 @@
 (ns autofocus-clj-ver-1.demos
   (:require
-   [autofocus-clj-ver-1.cli :as cli]
    ;; [clojure.string :as str]
    ))
 ;; [clojure.pprint :as p]
@@ -46,13 +45,11 @@
         (recur)))) ;; original: (recur [true]))))
   (println "All done!"))
 
-;; (deliver-cli-menu cli-menu)
-
-(defn -main []
-  ;; (io/io-demo-1)
-  ;; (deliver-cli-menu cli-menu)
-  ;; (run-app-test)
-  (cli/run-cli-app))
+;; (defn -main []
+;;   ;; (io/io-demo-1)
+;;   ;; (deliver-cli-menu cli-menu)
+;;   ;; (run-app-test)
+;;   (cli/run-cli-app))
 
 ;; (-main)
 
