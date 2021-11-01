@@ -112,9 +112,9 @@
 
 - [x] Test to confirm auto-marking after focusing works as desired. (see "long flow integration test" which confirms)
 
-- [ ] **Implement `last-done` to enable the app state to remember what the most recently completed item index was**
+- [ ] **Implement "last-done functionality" to enable the app state to remember what the most recently completed item index was**
 
-  - [ ] Implement app-t (atom with an integer in it) to keep a "current index" of internal application time
+  - [ ] Implement app-t (perhaps an atom with an integer in it) to keep a "current index" of internal application time
   - [ ] Add t-completed, t-marked, t-created w/o changing/removing the `clean/marked/done` statuses flag (add schema via "accretion" to gracefully transition the to-do list state architecture)
 
 - [ ] Implement "long flow integration test" (formerly called "long-e2e-test")
@@ -123,6 +123,40 @@
   - [x] 2. Add the items to the list
   - [x] 3. Do the first review
   - [ ] 4. Do the second review which requires `last-done`
+
+---
+
+## Notes
+
+- [ ] Implement FSM as data
+
+  reference: https://www.cognitect.com/blog/2017/5/22/restate-your-ui-using-state-machines-to-simplify-user-interface-development
+
+  ```clojure
+  ;;                           persistant data storage
+  ;;                                  ^^^^^
+  ;;                      adaptor at the persistence layer
+  ;;              (This is responsible for saving & loading, EDN and/or CSV)
+  ;;              note: all you need for EDN is (split) and (slurp)
+  ;;              note: Wrapping in a protocol can allow for extending later
+  ;;              (this can also handle text output to a format that
+  ;;                 is easily printed out for human consumption)
+  ;;                       _____________________________
+  ;;                       |       pure functions       |
+  ;; |    input / output   | menu/adding/reviewing/etc. | 
+  ;; human > program > cli >    application state (which part of the program I am in)       
+  ;;                              to-do list state (items in the list)
+  ```
+
+---
+
+## AutoFocus 2021_09_19 To-Do's
+
+- [ ] Enable display of add menu in the CLI
+  - [x] Enable changing of app state via CLI (this was already done)
+- [ ] Programatically derive last-done using a function of sorting list items on their t-done key value
+  - [ ] Add `t-created`, `t-marked`, and `t-done` as map keys to to-do items
+    - [ ] Add `t-time` to app-state
 
 ---
 
@@ -137,6 +171,7 @@
 - Enable the user to say that there is more work to do on a task after ending a focus session
 - Splash screen
 - Persisting items outside of the application state (saving, loading, exporting, importing, databases, etc.)
+  - things to try: protocols & reified Java objects ~ DF
 - Users, Accounts, Login, Authentication, Registering
 - Multiple lists ("work", "personal", "etc.")
 - Settings to modify look, feel, display, etc.
@@ -183,6 +218,13 @@
   - [x] Results: As far as I can tell, one cannot determine which was the last done item simply by looking at the list itself
   
 - [ ] What does my data look like?
+
+- [ ] question: What needs to happen in order to allow "back button" functionality in the command line app? For example: State history stack, state history buffer (remembering X states & changes)
+
+  - [ ] sub-question: What about limited back/interrupt functionality simply for a few states? For example:
+    - [ ] Backing out of creating a to-do list item
+    - [ ] Backing out of a review session
+    - [ ] Backing out of a focus session
 
 ---
 
