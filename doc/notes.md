@@ -61,3 +61,13 @@ UPDATE 2: Will use `keep-indexed` instead b/c (for now) I don't need the nils.
 
 Initial Thoughts:
 ~~The "index-of-first-markable" function will be much easier to implement I believe if items store their own index in the list. That said, adding indecies to list items can also create more issues down the line, if they ever need to be updated, for example... Updating list item indecies may be beneficial, for example, in circumstances where the entire list is cleared out, lists are saved in and out of memory, or other "global" list modifications/(de)serializations. I believe I can avoid most of the mutations & place-driven development ("slots") this time, because Clojure makes it harder to mutate, and I have the intention to avoid the "slots".~~
+
+---
+
+console application architecture
+entire program (handles starting and stopping of the entire application)
+> CLI (handles IO)
+   > app (handles UI, time, and to-do list)
+       > list (handles internal list logic)
+           > item (handles internal item logic)
+TBD: persistence mechanism
