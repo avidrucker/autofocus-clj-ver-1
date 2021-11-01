@@ -1,65 +1,37 @@
 (ns autofocus-clj-ver-1.app
   (:require
-   ;; [autofocus-clj-ver-1.io :as io]
-   ;; TODO: remove this TEMP reference to util namespace
    [autofocus-clj-ver-1.list :as list]))
 
 ;; (def app-t (atom 0))
 
 ;; TODO: implement core that use initial-app-state to start the application
-(def initial-app-state
-  {
-   ;; UI state
-   :current-state :initial
+(def initial-program-state
+  {:current-ui 'Start ;; UI state
    ;; domain knowledge
-   :list []
-   :t 0 ;; sequential time of the list
+   :the-list []
+   :t-time 0 ;; sequential time of the-list
    })
 
-;; TODO: implement FSM as data
-;; reference: https://www.cognitect.com/blog/2017/5/22/restate-your-ui-using-state-machines-to-simplify-user-interface-development
-;; question: What needs to happen in order to allow "back button" functionality in the command line app?
-;;           For example: State history stack, state history buffer (remembering X states & changes)
-;;           sub-question: What about limited back/interrupt functionality simply for a few states?
-;;                         For example:
-;;                         - Backing out of creating a to-do list item
-;;                         - Backing out of a review session
-;;                         - Backing out of a focus session
-;;
-;; things to try: protocols & reified Java objects
-;; 
-;;                           persistant data storage
-;;                                  ^^^^^
-;;                      adaptor at the persistence layer
-;;              (This is responsible for saving & loading, EDN and/or CSV)
-;;              note: all you need for EDN is (split) and (slurp)
-;;              note: Wrapping in a protocol can allow for extending later
-;;              (this can also handle text output to a format that
-;;                 is easily printed out for human consumption)
-;;                       _____________________________
-;;                       |       pure functions       |
-;; |    input / output   | menu/adding/reviewing/etc. | 
-;; human > program > cli >    application state (which part of the program I am in)       
-;;                              to-do list state (items in the list)
-;; program usage intention state machine (indicates what the UI can do at any time)
-(def fsm {'Start          {:initial          'Menu}
-          'Menu           {:adding           'Add
-                           :reviewing        'Review
-                           :focusing         'Focus
-                           :about            'About
-                           :help             'Help
-                           :quitting         'Quit}
-          'Add            {:done             'Menu}
-          'Review         {:done             'Menu}
-          'Focus          {:no-work-left     'Menu
-                           :work-remains     'Dup}
-          'Dup            {:done             'Menu} ;; question: Does priority item duplication need its own state? What are the trade-offs?
-          'About          {:done             'Menu}
-          'Help           {:done             'Menu}
-          'Quit           {:yes-quit         'Exit ;; question: Does quit confirmation need its own state? What are the trade-offs?
-                           :no-quit          'Menu}
+;; program usage intention state machine
+;; (indicates what the UI can do at any time)
+(def ui-fsm {'Start       {:initial          {:next 'Menu}}
+          'Menu           {:adding           {:next 'Add :text {:id 1 :text "Add new to-do"}}
+                           :reviewing        {:next 'Review :text {:id 2 :text "Review to-do list"}}
+                           :focusing         {:next 'Focus :text {:id 3 :text "Focus on your priority to-do"}}
+                           :about            {:next 'About :text {:id 4 :text "Read about AutoFocus"}}
+                           :help             {:next 'Help :text {:id 5 :text "See the help section"}}
+                           ;; TODO: confirm correct logic to export and import this menu-text option
+                           :quitting         {:next 'Quit :text {:id "q" :text "Quit application"}}}
+          'Add            {:done             {:next 'Menu}}
+          'Review         {:done             {:next 'Menu}}
+          'Focus          {:no-work-left     {:next 'Menu}
+                           :work-remains     {:next 'Dup}}
+          'Dup            {:done             {:next 'Menu}} ;; question: Does priority item duplication need its own state? What are the trade-offs?
+          'About          {:done             {:next 'Menu}}
+          'Help           {:done             {:next 'Menu}}
+          'Quit           {:yes-quit         {:next 'Exit} ;; question: Does quit confirmation need its own state? What are the trade-offs?
+                           :no-quit          {:next 'Menu}  }
 })
-
 
 ;; TODO: implement this stub
 (defn focus-on-app
@@ -70,11 +42,13 @@
    - If yes: It updates the last-done and completes the marked item closest to the end of the list
    - If no: It returns the app-state as-is
    Note: last-done is 'the most recently completed item index'"
-  [{:keys [list last-done]} input-app]
-  (println "The list is: " (list/stringify-list-compact list))
-  (println "Last done is: " last-done)
-  (println "The type of 'input-app' is " (type input-app))
-  (println "Focusable: " (list/is-focusable-list? list)))
+  [{:keys [current-ui the-list t-time] :as input-app}]
+  (println "The UI state is: " current-ui)
+  (println "The list is: " (list/stringify-list-compact the-list))
+  (println (str "There are " (count the-list) " items in the list."))
+  (println "Current list time is: " t-time)
+  (println "The type of 'input-app' is: " (type input-app))
+  (println "Focusable: " (list/is-focusable-list? the-list)))
 
 ;; TODO: clean up duplicate data
 (def app-state
@@ -122,3 +96,5 @@
     ;; TODO: enable the user to confirm they are ready
     ;;       to quit the application (and not a mispress)
     :quitting (keyword ((get app-state :options) option))))
+
+;; (focus-on-app initial-program-state)
