@@ -1,6 +1,9 @@
 (ns autofocus-clj-ver-1.cli
 (:require
-[clojure.string :as str])
+[clojure.string :as str]
+ ;; TODO: remove app require here, and instead combine app and CLI in core
+ [autofocus-clj-ver-1.app :as app]
+ )
 )
 
 (defn- -print-prompt-and-options [prompt options]
@@ -22,7 +25,7 @@
            "\nvalid choice, please try again.")
       input-text))))
 
-(defn parse-options [options]
+(defn- -parse-options [options]
   (map (fn [opt idx]
          (if (string? opt)
            {:id (str (inc idx)) :text opt}
@@ -32,7 +35,7 @@
 ;; reference: https://clojuredocs.org/clojure.core/read-line#example-5f3ffb46e4b0b1e3652d7382
 (defn deliver-cli-menu
   [{:keys [prompt options]}]
-  (let [options       (parse-options options)
+  (let [options       (-parse-options options)
         valid-options (set (map :id options))]
     (loop []
       (-print-prompt-and-options prompt options)
@@ -74,15 +77,17 @@
 ;;     ;; code goes here
 ;;     ))
 
-(def cli-menu
-  {:prompt "Choose from the following menu:"
-   :options ["Add new to-do"
-             "Review to-do list"
-             "Focus on your priority to-do"
-             "Read about AutoFocus"
-             "See the help section"
-             {:id "q" :text "Quit application"}]})
+;; TODO: build this dynamically from ui-fsm
+;; (def cli-menu
+;;   {:prompt "Choose from the following menu:"
+;;    :options ["Add new to-do"
+;;              "Review to-do list"
+;;              "Focus on your priority to-do"
+;;              "Read about AutoFocus"
+;;              "See the help section"
+;;              {:id "q" :text "Quit application"}]})
 
+;; TODO: use ui-fsm to replace this
 ;; TODO: clean up duplicate data
 (defn menu-text-to-state [input-text]
   (case input-text
@@ -103,29 +108,25 @@
 ;; TODO: update logic to use state names
 ;;       instead of menu text options
 (defn run-cli-app
-  []
-  (println "Welcome to AutoFocus!")
-  (loop [current-state {:state :menu}]
-    ;; DEBUGGING
-    (println "Current state is:")
-    (println current-state)
-    ;; TODO: implement conditional logic to load state
-    ;; depending on 'current-state'
-    (let [new-state (deliver-cli-menu cli-menu)]
-      ;; TODO: update logic to use state names
-      ;;       instead of menu text options
-      ;; DEBUGGING
-      ;; (println "New state will be:")
-      ;; (if (keyword? new-state)
-      ;;   (println new-state)
-      ;;   (println (keyword
-      ;;             (menu-text-to-state
-      ;;              (get new-state :text)))))
+  [initial-program-state]
+  
+  (loop [{:keys [current-ui the-list t-time]} initial-program-state] ;; before: [current state {:state :menu}]
+    (println "Current state is:" current-ui) ;; DEBUGGING
+
+    ;; dispatch on current state
+    (let [new-state (cond
+                      (= 'Start current-ui)
+                      (do (println "Welcome to AutoFocus!") :initial)
+
+                      (= 'Menu current-ui)
+                      (deliver-cli-menu {:prompt "Choose from the following menu:"
+                                         :options (get app/ui-fsm 'Menu)}))]
       (when
        (not= new-state :cancelled)
-        ;; DEBUGGING
-        ;; (println "Still running...")
+        ;; (println "Still running...") ;; DEBUGGING
         (recur {:state
+                ;; TODO: refactor menu-text-to-state out from cli namespace
+                ;;       (ie. make it so that CLI doesn't know anything about app)
                 (keyword (menu-text-to-state
                           (get new-state :text)))}))))
   (println "Bye!"))
